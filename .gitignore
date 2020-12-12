@@ -1,0 +1,5 @@
+# folders to ignore
+.vscode
+
+# files to ignore
+*.code-workspace
