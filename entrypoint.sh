@@ -14,7 +14,7 @@ else
   input_args="$*"
 fi
 
-sh -c "black --check ${input_args}" \
+black --check ${input_args} \
   | reviewdog -f="black" \
       -name="${INPUT_TOOL_NAME}" \
       -reporter="${INPUT_REPORTER:-github-pr-check}" \
