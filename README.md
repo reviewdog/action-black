@@ -1,6 +1,4 @@
-# action-template
-
-<!-- TODO: replace reviewdog/action-template with your repo name -->
+# Black action
 
 [![Test](https://github.com/reviewdog/action-template/workflows/Test/badge.svg)](https://github.com/reviewdog/action-template/actions?query=workflow%3ATest)
 [![reviewdog](https://github.com/reviewdog/action-template/workflows/reviewdog/badge.svg)](https://github.com/reviewdog/action-template/actions?query=workflow%3Areviewdog)
@@ -27,30 +25,30 @@ This repo contains a sample action to run [misspell](https://github.com/client9/
 ```yaml
 inputs:
   github_token:
-    description: 'GITHUB_TOKEN'
-    default: '${{ github.token }}'
+    description: "The automatically created secret github action token."
+    required: true
+    default: ${{ github.token }}
   workdir:
-    description: 'Working directory relative to the root directory.'
-    default: '.'
+    description: "Working directory relative to the root directory."
+    default: "."
   level:
-    description: 'Report level for reviewdog [info,warning,error]'
-    default: 'error'
+    description: "Report level for reviewdog [info, warning,error]"
+    default: "error"
   reporter:
-    description: 'Reporter of reviewdog command [github-pr-check,github-check,github-pr-review].'
-    default: 'github-pr-check'
+    description: "Reporter of reviewdog command [github-pr-check, github-pr-review]."
+    default: "github-pr-check"
   filter_mode:
     description: |
-      Filtering mode for the reviewdog command [added,diff_context,file,nofilter].
+      Filtering mode for the reviewdog command [added, diff_context, file, nofilter].
       Default is added.
-    default: 'added'
+    default: "added"
   fail_on_error:
     description: |
       Exit code for reviewdog when errors are found [true,false]
       Default is `false`.
-    default: 'false'
+    default: "false"
   reviewdog_flags:
-    description: 'Additional reviewdog flags'
-    default: ''
+    description: "Additional reviewdog flags"
 ```
 
 ## Usage
@@ -64,7 +62,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: reviewdog/action-template@v1
+      - uses: reviewdog/black-action@v1
         with:
           github_token: ${{ secrets.github_token }}
           # Change reviewdog reporter if you need [github-pr-check,github-check,github-pr-review].
