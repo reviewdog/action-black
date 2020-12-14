@@ -73,7 +73,7 @@ jobs:
         with:
           github_token: ${{ secrets.github_token }}
           # Change reviewdog reporter if you need [github-pr-check, github-check].
-          reporter: github-pr-review
+          reporter: github-pr-check
           # Change reporter level if you need.
           # GitHub Status Check won't become failure with warning.
           level: warning
