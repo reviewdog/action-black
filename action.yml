@@ -42,6 +42,7 @@ inputs:
     description: "Additional reviewdog flags"
     required: false
     default: ""
+
 runs:
   using: "docker"
   image: "Dockerfile"
