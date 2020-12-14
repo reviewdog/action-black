@@ -7,7 +7,14 @@ fi
 
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
 
-sh -c "black $*" \
+# If no arguments are given use current working directory
+if [[ "$#" -eq 0 ]] ; then
+    input_args="."
+else
+  input_args="$*"
+fi
+
+sh -c "black --check ${input_args}" \
   | reviewdog -f="black" \
       -name="${INPUT_TOOL_NAME}" \
       -reporter="${INPUT_REPORTER:-github-pr-check}" \
