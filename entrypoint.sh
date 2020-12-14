@@ -14,11 +14,17 @@ else
   input_args="$*"
 fi
 
-black --check ${input_args} 2>&1 \
-  | reviewdog -f="black" \
-      -name="${INPUT_TOOL_NAME}" \
-      -reporter="${INPUT_REPORTER:-github-pr-check}" \
-      -filter-mode="${INPUT_FILTER_MODE}" \
-      -fail-on-error="${INPUT_FAIL_ON_ERROR}" \
-      -level="${INPUT_LEVEL}" \
-      ${INPUT_REVIEWDOG_FLAGS}
+if [ "${INPUT_REPORTER}" = 'github-pr-review' ]; then
+  # erroformat: https://git.io/JeGMU
+  echo "ERROR: github-pr-review unsupported (for the black formatter)"
+  exit 1
+else
+  black --check ${input_args} 2>&1 \
+    | reviewdog -f="black" \
+        -name="${INPUT_TOOL_NAME}" \
+        -reporter="${INPUT_REPORTER:-github-pr-check}" \
+        -filter-mode="${INPUT_FILTER_MODE}" \
+        -fail-on-error="${INPUT_FAIL_ON_ERROR}" \
+        -level="${INPUT_LEVEL}" \
+        ${INPUT_REVIEWDOG_FLAGS}
+fi

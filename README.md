@@ -7,8 +7,7 @@
 [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/rickstaa/action-black?logo=github&sort=semver)](https://github.com/rickstaa/action-black/releases)
 [![action-bumpr supported](https://img.shields.io/badge/bumpr-supported-ff69b4?logo=github&link=https://github.com/haya14busa/action-bumpr)](https://github.com/haya14busa/action-bumpr)
 
-![github-pr-review demo](https://user-images.githubusercontent.com/3797062/73162963-4b8e2b00-4132-11ea-9a3f-f9c6f624c79f.png)
-![github-pr-check demo](https://user-images.githubusercontent.com/3797062/73163032-70829e00-4132-11ea-8481-f213a37db354.png)
+![github-pr-check demo](https://user-images.githubusercontent.com/17570430/102082175-c6773780-3e11-11eb-9af9-d7ee07ca353a.png)
 
 This action runs the [black formatter](https://github.com/psf/black) with reviewdog on pull requests to improve code review experience.
 
@@ -35,9 +34,8 @@ inputs:
     default: "error"
   reporter:
     description: |
-      Reporter of reviewdog command [github-pr-check,github-pr-review,github-check].
-      Default is github-pr-check.
-      github-pr-review can use Markdown and add a link to rule page in reviewdog reports.
+      Reporter of reviewdog command [github-pr-check, github-pr-review, github-check].
+      Default is github-pr-check. Github-pr-review is not supported for the black formatter.
     required: false
     default: "github-pr-check"
   filter_mode:
@@ -58,6 +56,8 @@ inputs:
     default: ""
 ```
 
+**NOTE:** The reviewdog [github-pr-review](https://github.com/reviewdog/reviewdog#reporter-github-pullrequest-review-comment--reportergithub-pr-review) option is not supported as the black formatter does not specify line numbers.
+
 ## Usage
 
 ```yaml
@@ -72,7 +72,7 @@ jobs:
       - uses: reviewdog/action-black@v1
         with:
           github_token: ${{ secrets.github_token }}
-          # Change reviewdog reporter if you need [github-pr-check,github-check,github-pr-review].
+          # Change reviewdog reporter if you need [github-pr-check, github-check].
           reporter: github-pr-review
           # Change reporter level if you need.
           # GitHub Status Check won't become failure with warning.
