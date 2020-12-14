@@ -8,7 +8,7 @@ fi
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
 
 # If no arguments are given use current working directory
-if [[ "$#" -eq 0 ]] ; then
+if [ $# -eq 0 ]; then
     input_args="."
 else
   input_args="$*"
