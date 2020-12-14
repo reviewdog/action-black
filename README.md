@@ -1,46 +1,61 @@
 # Black action
 
-[![Test](https://github.com/reviewdog/action-template/workflows/Test/badge.svg)](https://github.com/reviewdog/action-template/actions?query=workflow%3ATest)
-[![reviewdog](https://github.com/reviewdog/action-template/workflows/reviewdog/badge.svg)](https://github.com/reviewdog/action-template/actions?query=workflow%3Areviewdog)
-[![depup](https://github.com/reviewdog/action-template/workflows/depup/badge.svg)](https://github.com/reviewdog/action-template/actions?query=workflow%3Adepup)
-[![release](https://github.com/reviewdog/action-template/workflows/release/badge.svg)](https://github.com/reviewdog/action-template/actions?query=workflow%3Arelease)
-[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/reviewdog/action-template?logo=github&sort=semver)](https://github.com/reviewdog/action-template/releases)
+[![Test](https://github.com/rickstaa/action-black/workflows/Test/badge.svg)](https://github.com/rickstaa/action-black/actions?query=workflow%3ATest)
+[![reviewdog](https://github.com/rickstaa/action-black/workflows/reviewdog/badge.svg)](https://github.com/rickstaa/action-black/actions?query=workflow%3Areviewdog)
+[![depup](https://github.com/rickstaa/action-black/workflows/depup/badge.svg)](https://github.com/rickstaa/action-black/actions?query=workflow%3Adepup)
+[![release](https://github.com/rickstaa/action-black/workflows/release/badge.svg)](https://github.com/rickstaa/action-black/actions?query=workflow%3Arelease)
+[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/rickstaa/action-black?logo=github&sort=semver)](https://github.com/rickstaa/action-black/releases)
 [![action-bumpr supported](https://img.shields.io/badge/bumpr-supported-ff69b4?logo=github&link=https://github.com/haya14busa/action-bumpr)](https://github.com/haya14busa/action-bumpr)
 
 ![github-pr-review demo](https://user-images.githubusercontent.com/3797062/73162963-4b8e2b00-4132-11ea-9a3f-f9c6f624c79f.png)
 ![github-pr-check demo](https://user-images.githubusercontent.com/3797062/73163032-70829e00-4132-11ea-8481-f213a37db354.png)
 
-This action runs the [black](https://github.com/PyCQA/pyflakes) with reviewdog on pull requests to improve code review experience.
+This action runs the [black formatter](https://github.com/psf/black) with reviewdog on pull requests to improve code review experience.
 
 ## Input
 
 ```yaml
 inputs:
+  workdir:
+    description: "Working directory relative to the root directory."
+    required: false
+    default: "."
+  # Reviewdog related inputs
   github_token:
     description: "The automatically created secret github action token."
     required: true
     default: ${{ github.token }}
-  workdir:
-    description: "Working directory relative to the root directory."
-    default: "."
+  tool_name:
+    description: "Tool name to use for reviewdog reporter"
+    required: false
+    default: "black-format"
   level:
-    description: "Report level for reviewdog [info, warning,error]"
+    description: "Report level for reviewdog [info, warning, error]"
+    required: false
     default: "error"
   reporter:
-    description: "Reporter of reviewdog command [github-pr-check, github-pr-review]."
+    description: |
+      Reporter of reviewdog command [github-pr-check,github-pr-review,github-check].
+      Default is github-pr-check.
+      github-pr-review can use Markdown and add a link to rule page in reviewdog reports.
+    required: false
     default: "github-pr-check"
   filter_mode:
     description: |
       Filtering mode for the reviewdog command [added, diff_context, file, nofilter].
       Default is added.
+    required: false
     default: "added"
   fail_on_error:
     description: |
       Exit code for reviewdog when errors are found [true,false]
       Default is `false`.
+    required: false
     default: "false"
   reviewdog_flags:
     description: "Additional reviewdog flags"
+    required: false
+    default: ""
 ```
 
 ## Usage
@@ -50,11 +65,11 @@ name: reviewdog
 on: [pull_request]
 jobs:
   linter_name:
-    name: runner / <linter-name>
+    name: runner / black formatter
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: reviewdog/black-action@v1
+      - uses: reviewdog/action-black@v1
         with:
           github_token: ${{ secrets.github_token }}
           # Change reviewdog reporter if you need [github-pr-check,github-check,github-pr-review].
@@ -96,4 +111,4 @@ Supported linters:
 This repository uses [haya14busa/action-depup](https://github.com/haya14busa/action-depup) to update
 reviewdog version.
 
-[![reviewdog depup demo](https://user-images.githubusercontent.com/3797062/73154254-170e7500-411a-11ea-8211-912e9de7c936.png)](https://github.com/reviewdog/action-template/pull/6)
+[![reviewdog depup demo](https://user-images.githubusercontent.com/3797062/73154254-170e7500-411a-11ea-8211-912e9de7c936.png)](https://github.com/rickstaa/action-black/pull/6)
