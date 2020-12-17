@@ -28,29 +28,29 @@ fi
 #   rd_fail_on_error=${INPUT_FAIL_ON_ERROR:-false}
 # fi
 # if [ "${INPUT_REVIEWDOG_FLAGS}" != *"-level"* ]; then
-#   rd_level=${INPUT_FAIL_ON_ERROR:-false}
+#   rd_level=${INPUT_LEVEL:-error}
 # fi
 
 # Run black with reviewdog
-if [ "${rd_reporter}" = 'github-pr-review' ]; then
+if [ "${INPUT_REPORTER}" = 'github-pr-review' ]; then
   # work only fix diff suggestion
   cd "${GITHUB_WORKSPACE}" || exit
   black --diff --quiet "${INPUT_WORKDIR}/${input_args}" 2>&1 \
     | reviewdog -f="diff"                                    \
     -f.diff.strip=0                                          \
-    -name="${rd_name}-fix"                                   \
+    -name="${INPUT_TOOL_NAME}-fix"                                   \
     -reporter="github-pr-review"                             \
     -filter-mode="diff_context"                              \
-    -level="${rd_level}"                                     \
-    -fail-on-error="${rd_fail_on_error}"                     \
+    -level="${INPUT_LEVEL}"                                     \
+    -fail-on-error="${INPUT_FAIL_ON_ERROR}"                     \
     ${INPUT_REVIEWDOG_FLAGS}
 else
   black --check "${input_args}" 2>&1                 \
     | reviewdog -f="black"                         \
-    -name="${rd_name}"                             \
-    -reporter="${rd_reporter:-github-pr-check}"    \
-    -filter-mode="${rd_filter_mode}"               \
-    -fail-on-error="${rd_fail_on_error}"           \
-    -level="${rd_level}"                           \
+    -name="${INPUT_TOOL_NAME}"                             \
+    -reporter="${INPUT_REPORTER:-github-pr-check}"    \
+    -filter-mode="${INPUT_FILTER_MODE}"               \
+    -fail-on-error="${INPUT_FAIL_ON_ERROR}"           \
+    -level="${INPUT_LEVEL}"                           \
     ${INPUT_REVIEWDOG_FLAGS}
 fi
