@@ -14,25 +14,43 @@ else
   input_args="$*"
 fi
 
-if [ "${INPUT_REPORTER}" = 'github-pr-review' ]; then
+# Parse reviewdog_flags action argument to filter duplicates
+if [ "${INPUT_REVIEWDOG_FLAGS}" != *"-name"* ]; then
+  rd_name=${INPUT_TOOL_NAME:-black-format}
+fi
+if [ "${INPUT_REVIEWDOG_FLAGS}" != *"-reporter"* ]; then
+  rd_reporter=${INPUT_REPORTER:-github-pr-check}
+fi
+if [ "${INPUT_REVIEWDOG_FLAGS}" != *"-filter-mode"* ]; then
+  rd_filter_mode=${INPUT_FILTER_MODE:-added}
+fi
+if [ "${INPUT_REVIEWDOG_FLAGS}" != *"-fail-on-error"* ]; then
+  rd_fail_on_error=${INPUT_FAIL_ON_ERROR:-false}
+fi
+if [ "${INPUT_REVIEWDOG_FLAGS}" != *"-level"* ]; then
+  rd_level=${INPUT_FAIL_ON_ERROR:-false}
+fi
+
+# Run black with reviewdog
+if [ "${rd_reporter}" = 'github-pr-review' ]; then
   # work only fix diff suggestion
   cd "${GITHUB_WORKSPACE}" || exit
   black --diff --quiet "${INPUT_WORKDIR}/${input_args}" 2>&1 \
     | reviewdog -f="diff"                                    \
     -f.diff.strip=0                                          \
-    -name="${INPUT_TOOL_NAME}-fix"                           \
+    -name="${rd_name}-fix"                                   \
     -reporter="github-pr-review"                             \
     -filter-mode="diff_context"                              \
-    -fail-on-error="${INPUT_FAIL_ON_ERROR}"                  \
-    -level="${INPUT_LEVEL}"                                  \
-    ${INPUT_REVIEWDOG_FLAGS}
+    -level="${rd_level}"                                     \
+    -fail-on-error="${rd_fail_on_error}"                     \
+    "${INPUT_REVIEWDOG_FLAGS}"
 else
-  black --check "${input_args}" 2>&1                 \
+  black --check ${input_args} 2>&1                 \
     | reviewdog -f="black"                         \
-    -name="${INPUT_TOOL_NAME}"                     \
-    -reporter="${INPUT_REPORTER:-github-pr-check}" \
-    -filter-mode="${INPUT_FILTER_MODE}"            \
-    -fail-on-error="${INPUT_FAIL_ON_ERROR}"        \
-    -level="${INPUT_LEVEL}"                        \
-    ${INPUT_REVIEWDOG_FLAGS}
+    -name="${rd_name}"                             \
+    -reporter="${rd_reporter:-github-pr-check}"    \
+    -filter-mode="${rd_filter_mode}"               \
+    -fail-on-error="${rd_fail_on_error}"           \
+    -level="${rd_level}"                           \
+    "${INPUT_REVIEWDOG_FLAGS}"
 fi
