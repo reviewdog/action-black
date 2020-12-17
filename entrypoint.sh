@@ -25,14 +25,14 @@ if [ "${INPUT_REPORTER}" = 'github-pr-review' ]; then
     -filter-mode="diff_context"                              \
     -fail-on-error="${INPUT_FAIL_ON_ERROR}"                  \
     -level="${INPUT_LEVEL}"                                  \
-    "${INPUT_REVIEWDOG_FLAGS}"
+    ${INPUT_REVIEWDOG_FLAGS}
 else
-  black --check ${input_args} 2>&1                 \
+  black --check "${input_args}" 2>&1                 \
     | reviewdog -f="black"                         \
     -name="${INPUT_TOOL_NAME}"                     \
     -reporter="${INPUT_REPORTER:-github-pr-check}" \
     -filter-mode="${INPUT_FILTER_MODE}"            \
     -fail-on-error="${INPUT_FAIL_ON_ERROR}"        \
     -level="${INPUT_LEVEL}"                        \
-    "${INPUT_REVIEWDOG_FLAGS}"
+    ${INPUT_REVIEWDOG_FLAGS}
 fi
