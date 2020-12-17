@@ -16,14 +16,15 @@ fi
 
 if [ "${INPUT_REPORTER}" = 'github-pr-review' ]; then
   # work only fix diff suggestion
-  black --diff --quiet ${input_args} 2>&1   \
-    | reviewdog -f="diff"                   \
-    -f.diff.strip=1                         \
-    -name="${INPUT_TOOL_NAME}-fix"          \
-    -reporter="github-pr-review"            \
-    -filter-mode="diff_context"             \
-    -fail-on-error="${INPUT_FAIL_ON_ERROR}" \
-    -level="${INPUT_LEVEL}"                 \
+  cd "${GITHUB_WORKSPACE}" || exit
+  black --diff --quiet "${INPUT_WORKDIR}/${input_args}" 2>&1 \
+    | reviewdog -f="diff"                                    \
+    -f.diff.strip=0                                          \
+    -name="${INPUT_TOOL_NAME}-fix"                           \
+    -reporter="github-pr-review"                             \
+    -filter-mode="diff_context"                              \
+    -fail-on-error="${INPUT_FAIL_ON_ERROR}"                  \
+    -level="${INPUT_LEVEL}"                                  \
     ${INPUT_REVIEWDOG_FLAGS}
 else
   black --check ${input_args} 2>&1                 \
