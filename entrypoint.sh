@@ -25,7 +25,6 @@ if [ "${INPUT_REPORTER}" = 'github-pr-review' ]; then
     -fail-on-error="${INPUT_FAIL_ON_ERROR}" \
     -level="${INPUT_LEVEL}"                 \
     ${INPUT_REVIEWDOG_FLAGS}
-fi
 else
   black --check ${input_args} 2>&1                 \
     | reviewdog -f="black"                         \
