@@ -56,8 +56,6 @@ inputs:
     default: ""
 ```
 
-**NOTE:** The reviewdog [github-pr-review](https://github.com/reviewdog/reviewdog#reporter-github-pullrequest-review-comment--reportergithub-pr-review) option is not supported as the black formatter does not specify line numbers.
-
 ## Usage
 
 ```yaml
