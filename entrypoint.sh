@@ -35,6 +35,7 @@ else
 fi
 
 # Run black with reviewdog
+error_occured="false"
 if [ "${INPUT_ANNOTATE}" = 'true' ]; then
   if [ "${INPUT_REPORTER}" = 'github-pr-review' ]; then
     echo "[action-black] Checking python code with the black formatter and reviewdog..."
@@ -47,7 +48,7 @@ if [ "${INPUT_ANNOTATE}" = 'true' ]; then
       -filter-mode="diff_context"                              \
       -level="${INPUT_LEVEL}"                                  \
       -fail-on-error="${INPUT_FAIL_ON_ERROR}"                  \
-      ${INPUT_REVIEWDOG_FLAGS}
+      ${INPUT_REVIEWDOG_FLAGS} || error_occured="true"
   else
     echo "[action-black] Checking python code with the black formatter and reviewdog..."
     black --check "${black_args}" 2>&1 \
@@ -57,16 +58,21 @@ if [ "${INPUT_ANNOTATE}" = 'true' ]; then
       -filter-mode="${INPUT_FILTER_MODE}"               \
       -fail-on-error="${INPUT_FAIL_ON_ERROR}"           \
       -level="${INPUT_LEVEL}"                           \
-      ${INPUT_REVIEWDOG_FLAGS}
+      ${INPUT_REVIEWDOG_FLAGS} || error_occured="true"
   fi
 else
   echo "[action-black] Checking python code using the black formatter..."
-  black --check "${black_args}" 2>&1
+  black --check "${black_args}" 2>&1 || error_occured="true"
 fi
 
 # Also format code if this is requested
 # NOTE: Usefull for writing back changes or creating a pull request.
 if [ "${INPUT_FORMAT}" = 'true' ]; then
   echo "[action-black] Formatting python code using the black formatter..."
-  black "${black_args}"
+  black "${black_args}" || error_occured="true"
+fi
+
+# Throw error if an error occured
+if [ "${error_occured}" = 'true' ] && [ "${INPUT_FAIL_ON_ERROR}" = 'true' ]; then
+  exit 1
 fi

@@ -10,6 +10,12 @@ inputs:
     description: "Don't write the files back, just return the status."
     required: false
     default: "true"
+  fail_on_error:
+    description: |
+      Exit code for black and reviewdog when errors are found [true, false]
+      Default is `false`.
+    required: false
+    default: "false"
   # Reviewdog related inputs
   annotate:
     description: "Annotate black changes using reviewdog."
@@ -40,12 +46,6 @@ inputs:
       Default is added.
     required: false
     default: "added"
-  fail_on_error:
-    description: |
-      Exit code for reviewdog when errors are found [true,false]
-      Default is `false`.
-    required: false
-    default: "false"
   reviewdog_flags:
     description: "Additional reviewdog flags"
     required: false
