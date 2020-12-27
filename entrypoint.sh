@@ -37,6 +37,7 @@ fi
 # Run black with reviewdog
 if [ "${INPUT_ANNOTATE}" = 'true' ]; then
   if [ "${INPUT_REPORTER}" = 'github-pr-review' ]; then
+    echo "[action-black] Checking python code with the black formatter and reviewdog..."
     # work only fix diff suggestion
     black --diff --quiet "${black_args}" 2>&1 \
       | reviewdog -f="diff"                                    \
@@ -48,6 +49,7 @@ if [ "${INPUT_ANNOTATE}" = 'true' ]; then
       -fail-on-error="${INPUT_FAIL_ON_ERROR}"                  \
       ${INPUT_REVIEWDOG_FLAGS}
   else
+    echo "[action-black] Checking python code with the black formatter and reviewdog..."
     black --check "${black_args}" 2>&1 \
       | reviewdog -f="black"                            \
       -name="${INPUT_TOOL_NAME}"                        \
@@ -58,11 +60,13 @@ if [ "${INPUT_ANNOTATE}" = 'true' ]; then
       ${INPUT_REVIEWDOG_FLAGS}
   fi
 else
+  echo "[action-black] Checking python code using the black formatter..."
   black --check "${black_args}" 2>&1
 fi
 
 # Also format code if this is requested
 # NOTE: Usefull for writing back changes or creating a pull request.
 if [ "${INPUT_FORMAT}" = 'true' ]; then
+  echo "[action-black] Formatting python code using the black formatter..."
   black "${black_args}"
 fi
