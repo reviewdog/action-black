@@ -9,7 +9,7 @@ inputs:
   format:
     description: "Don't write the files back, just return the status."
     required: false
-    default: "true"
+    default: "false"
   fail_on_error:
     description: |
       Exit code for black and reviewdog when errors are found [true, false]

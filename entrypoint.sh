@@ -48,7 +48,7 @@ if [ "${INPUT_ANNOTATE}" = 'true' ]; then
       -filter-mode="diff_context"                              \
       -level="${INPUT_LEVEL}"                                  \
       -fail-on-error="${INPUT_FAIL_ON_ERROR}"                  \
-      ${INPUT_REVIEWDOG_FLAGS} || error_occured="true"
+      ${INPUT_REVIEWDOG_FLAGS} || error_occured="true"`
   else
     echo "[action-black] Checking python code with the black formatter and reviewdog..."
     black --check "${black_args}" 2>&1 \
