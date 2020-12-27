@@ -6,7 +6,15 @@ inputs:
     description: "Working directory relative to the root directory."
     required: false
     default: "."
+  format:
+    description: "Don't write the files back, just return the status."
+    required: false
+    default: "true"
   # Reviewdog related inputs
+  annotate:
+    description: "Annotate black changes using reviewdog."
+    required: false
+    default: "true"
   github_token:
     description: "The automatically created secret github action token."
     required: true
@@ -42,7 +50,6 @@ inputs:
     description: "Additional reviewdog flags"
     required: false
     default: ""
-
 runs:
   using: "docker"
   image: "Dockerfile"
