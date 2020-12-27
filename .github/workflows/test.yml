@@ -39,7 +39,7 @@ jobs:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-check
           level: warning
-          workdir: ./testdata/subdir/
+          workdir: ./testdata/subfolder/
 
   test-pr-check-format:
     if: github.event_name == 'pull_request'
@@ -52,7 +52,7 @@ jobs:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-check
           level: warning
-          workdir: ./testdata/subdir/
+          workdir: ./testdata/subfolder/
           format: true
 
   test-pr-review:
