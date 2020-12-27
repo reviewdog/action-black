@@ -64,6 +64,17 @@ inputs:
     default: ""
 ```
 
+### Docker input args
+
+Besides the aforementioned input arguments you can also supply additional input arguments for the black formatter using the args keyword [run.args](https://docs.github.com/en/free-pro-team@latest/actions/creating-actions/metadata-syntax-for-github-actions#runsargs).
+
+```yaml
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args: ". --verbose"
+```
+
 ## Basic usage
 
 In it's simplest form this action can be used to annotate the changes the black formatter would make if it was run on the code.
