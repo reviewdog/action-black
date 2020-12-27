@@ -27,7 +27,7 @@ if [ "${INPUT_REPORTER}" = 'github-pr-review' ]; then
     -f=diff \
     -f.diff.strip=0 \
     -name=${INPUT_TOOL_NAME:-black}-fix \
-    -report=github-pr-review \
+    -reporter=github-pr-review \
     -filter-mode=diff_context"
 else
   black_args="${black_args} --check"
