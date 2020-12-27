@@ -19,7 +19,7 @@ else
   contains_path="false"
   for input_arg in "$@"
   do
-    if [ "${input_arg::1}" != "-" ]; then
+    if [ "$(printf '%s' "$input_arg" | cut -c 1)" != "-" ]; then
       contains_path="true"
     fi
   done
