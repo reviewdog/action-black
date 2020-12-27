@@ -9,16 +9,36 @@ export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
 
 # If no arguments are given use current working directory
 if [ "$#" -eq 0 ]; then
-  input_args="."
+  if [ "${INPUT_WORKDIR}" = "." ] || [ "${INPUT_WORKDIR}" = "" ]; then
+    black_args="."
+  else
+    black_args="${INPUT_WORKDIR}"
+  fi
 else
-  input_args="$*"
+  # Check if cmd line input argscontain non option arguments
+  contains_path="false"
+  for input_arg in "$@"
+  do
+    if [ "${input_arg::1}" != "-" ]; then
+      contains_path="true"
+    fi
+  done
+
+  # Create black input argumnet
+  # NOTE: If workdir is defined it takes precedence over any paths specified in
+  # the container input args.
+  if [ "${INPUT_WORKDIR}" = "." ] && [ "${contains_path}" = "true" ]; then
+      black_args="$*"
+  else
+    black_args="${INPUT_WORKDIR} $*"
+  fi
 fi
 
 # Run black with reviewdog
 if [ "${INPUT_ANNOTATE}" = 'true' ]; then
   if [ "${INPUT_REPORTER}" = 'github-pr-review' ]; then
     # work only fix diff suggestion
-    black --diff --quiet "${INPUT_WORKDIR}/${input_args}" 2>&1 \
+    black --diff --quiet "${black_args}" 2>&1 \
       | reviewdog -f="diff"                                    \
       -f.diff.strip=0                                          \
       -name="${INPUT_TOOL_NAME}-fix"                           \
@@ -28,7 +48,7 @@ if [ "${INPUT_ANNOTATE}" = 'true' ]; then
       -fail-on-error="${INPUT_FAIL_ON_ERROR}"                  \
       ${INPUT_REVIEWDOG_FLAGS}
   else
-    black --check "${INPUT_WORKDIR}/${input_args}" 2>&1 \
+    black --check "${black_args}" 2>&1 \
       | reviewdog -f="black"                            \
       -name="${INPUT_TOOL_NAME}"                        \
       -reporter="${INPUT_REPORTER:-github-pr-check}"    \
@@ -38,11 +58,11 @@ if [ "${INPUT_ANNOTATE}" = 'true' ]; then
       ${INPUT_REVIEWDOG_FLAGS}
   fi
 else
-  black --check "${INPUT_WORKDIR}/${input_args}" 2>&1
+  black --check "${black_args}" 2>&1
 fi
 
 # Also format code if this is requested
 # NOTE: Usefull for writing back changes or creating a pull request.
 if [ "${INPUT_FORMAT}" = 'true' ]; then
-  black "${INPUT_WORKDIR}/${input_args}"
+  black "${black_args}"
 fi
