@@ -9,33 +9,48 @@
 
 ![github-pr-check demo](https://user-images.githubusercontent.com/17570430/102082175-c6773780-3e11-11eb-9af9-d7ee07ca353a.png)
 
-This action runs the [black formatter](https://github.com/psf/black) with reviewdog on pull requests to improve code review experience.
+This action runs the [black formatter](https://github.com/psf/black) with reviewdog on pull requests to improve code review experience. It can be used to format your code and/or annotate possible changes that would be made during this formatting.
 
-## Input
+## Inputs
 
 ```yaml
 inputs:
   workdir:
-    description: "Working directory relative to the root directory."
+    description: "Working directory relative to the root directory. Defaults to '.'."
     required: false
     default: "."
+  format:
+    description: |
+      If true, black format files and commit are creatable (use other Action).
+      Defaults to 'false'.
+    required: false
+    default: "false"
+  fail_on_error:
+    description: |
+      Exit code when black formatting errors are found [true, false]. Defaults to 'false'.
+    required: false
+    default: "false"
   # Reviewdog related inputs
+  annotate:
+    description: "Annotate black changes using reviewdog. Defaults to 'true'."
+    required: false
+    default: "true"
   github_token:
     description: "The automatically created secret github action token."
     required: true
     default: ${{ github.token }}
   tool_name:
-    description: "Tool name to use for reviewdog reporter"
+    description: "Tool name to use for reviewdog reporter. Defaults to 'black-format'."
     required: false
     default: "black-format"
   level:
-    description: "Report level for reviewdog [info, warning, error]"
+    description: "Report level for reviewdog [info, warning, error]. Defaults to 'error'."
     required: false
     default: "error"
   reporter:
     description: |
       Reporter of reviewdog command [github-pr-check, github-pr-review, github-check].
-      Default is github-pr-check. Github-pr-review is not supported for the black formatter.
+      Defaults to 'github-pr-check'.
     required: false
     default: "github-pr-check"
   filter_mode:
@@ -44,19 +59,26 @@ inputs:
       Default is added.
     required: false
     default: "added"
-  fail_on_error:
-    description: |
-      Exit code for reviewdog when errors are found [true,false]
-      Default is `false`.
-    required: false
-    default: "false"
   reviewdog_flags:
-    description: "Additional reviewdog flags"
+    description: "Additional reviewdog flags."
     required: false
     default: ""
 ```
 
-## Usage
+### Docker input args
+
+Besides the aforementioned input arguments you can also supply additional input arguments for the black formatter using the args keyword [run.args](https://docs.github.com/en/free-pro-team@latest/actions/creating-actions/metadata-syntax-for-github-actions#runsargs).
+
+```yaml
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args: ". --verbose"
+```
+
+## Basic usage
+
+In it's simplest form this action can be used to annotate the changes the black formatter would make if it was run on the code.
 
 ```yaml
 name: reviewdog
@@ -77,36 +99,64 @@ jobs:
           level: warning
 ```
 
-## Development
+## Advance use cases
 
-### Release
+This action can be combined with [peter-evans/create-pull-request](https://github.com/peter-evans/create-pull-request) or [stefanzweifel/git-auto-commit-action](https://github.com/stefanzweifel/git-auto-commit-action) to also apply the annotated changes to the repository.
 
-#### [haya14busa/action-bumpr](https://github.com/haya14busa/action-bumpr)
+### Commit changes
 
-You can bump version on merging Pull Requests with specific labels (bump:major,bump:minor,bump:patch).
-Pushing tag manually by yourself also work.
+```yaml
+name: reviewdog
+on: [pull_request]
+jobs:
+  name: runner / black
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: ${{ github.head_ref }}
+    - name: Check files using black formatter
+      uses: reviewdog/action-black@v1
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        reporter: github-check
+        level: error
+        fail_on_error: true
+        format: true
+    - name: Commit black formatting results
+      if: failure()
+      uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: ":art: Format Python code with psf/black push"
+```
 
-#### [haya14busa/action-update-semver](https://github.com/haya14busa/action-update-semver)
+### Create pull request
 
-This action updates major/minor release tags on a tag push. e.g. Update v1 and v1.2 tag when released v1.2.3.
-ref: <https://help.github.com/en/articles/about-actions#versioning-your-action>
-
-### Lint - reviewdog integration
-
-This reviewdog action template itself is integrated with reviewdog to run lints
-which is useful for Docker container based actions.
-
-![reviewdog integration](https://user-images.githubusercontent.com/3797062/72735107-7fbb9600-3bde-11ea-8087-12af76e7ee6f.png)
-
-Supported linters:
-
--   [reviewdog/action-shellcheck](https://github.com/reviewdog/action-shellcheck)
--   [reviewdog/action-hadolint](https://github.com/reviewdog/action-hadolint)
--   [reviewdog/action-misspell](https://github.com/reviewdog/action-misspell)
-
-### Dependencies Update Automation
-
-This repository uses [haya14busa/action-depup](https://github.com/haya14busa/action-depup) to update
-reviewdog version.
-
-[![reviewdog depup demo](https://user-images.githubusercontent.com/3797062/73154254-170e7500-411a-11ea-8211-912e9de7c936.png)](https://github.com/rickstaa/action-black/pull/6)
+```yaml
+name: reviewdog
+on: [pull_request]
+jobs:
+  name: runner / black
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v2
+    - name: Check files using black formatter
+      uses: reviewdog/action-black@v1
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        reporter: github-check
+        level: error
+        fail_on_error: true
+        format: true
+    - name: Create Pull Request
+      if: failure()
+      uses: peter-evans/create-pull-request@v3
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        title: "Format Python code with psf/black push"
+        commit-message: ":art: Format Python code with psf/black"
+        body: |
+          There appear to be some python formatting errors in ${{ github.sha }}. This pull request
+          uses the [psf/black](https://github.com/psf/black) formatter to fix these issues.
+        branch: depup/black
+```
