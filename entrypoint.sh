@@ -35,9 +35,9 @@ export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
 # fi
 
 if [[ "$#" -eq 0 ]]; then
-  black_args="${INPUT_WORKDIR}/."
+  black_args="."
 else
-  black_args="${INPUT_WORKDIR}/$*"
+  black_args="$*"
 fi
 
 # Run black with reviewdog
@@ -47,7 +47,7 @@ if [[ "${INPUT_ANNOTATE}" = 'true' ]]; then
   if [[ "${INPUT_REPORTER}" = 'github-pr-review' ]]; then
     echo "[action-black] Checking python code with the black formatter and reviewdog..."
     # work only fix diff suggestion
-    black --diff --quiet "${black_args}" 2>&1                  \
+    black --diff --quiet "${INPUT_WORKDIR}/${input_args}" 2>&1                  \
       | reviewdog -f="diff"                                    \
       -f.diff.strip=0                                          \
       -name="${INPUT_TOOL_NAME}-fix"                           \
@@ -61,7 +61,7 @@ if [[ "${INPUT_ANNOTATE}" = 'true' ]]; then
       # fi
   else
     echo "[action-black] Checking python code with the black formatter and reviewdog..."
-    black --check --quiet "${black_args}" 2>&1          \
+    black --check "${INPUT_WORKDIR}/${input_args}" 2>&1 \
       | reviewdog -f="black"                            \
       -name="${INPUT_TOOL_NAME}"                        \
       -reporter="${INPUT_REPORTER}"                     \
@@ -75,14 +75,14 @@ if [[ "${INPUT_ANNOTATE}" = 'true' ]]; then
   fi
 else
   echo "[action-black] Checking python code using the black formatter..."
-  black --check "${black_args}" 2>&1 || black_error="true"
+  black --check "${INPUT_WORKDIR}/${input_args}" 2>&1 #|| black_error="true"
 fi
 
 # Also format code if this is requested
 # NOTE: Useful for writing back changes or creating a pull request.
 if [[ "${INPUT_FORMAT}" = 'true'&& "${black_error}" = 'true' ]]; then
   echo "[action-black] Formatting python code using the black formatter..."
-  black "${black_args}" || black_error="true"
+  black "${INPUT_WORKDIR}/${input_args}" #|| black_error="true"
 elif [[ "${INPUT_FORMAT}" = 'true' && "${black_error}" != 'true' ]]; then
   echo "[action-black] Formatting not needed."
 fi
