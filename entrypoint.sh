@@ -49,10 +49,10 @@ if [[ "${INPUT_ANNOTATE}" = 'true' ]]; then
       -filter-mode="diff_context"                              \
       -level="${INPUT_LEVEL}"                                  \
       -fail-on-error="${INPUT_FAIL_ON_ERROR}"                  \
-      ${INPUT_REVIEWDOG_FLAGS} || reviewdog_error="true"
-      if [[ "${PIPESTATUS[0]}" ]]; then
-        black_error="true"
-      fi
+      ${INPUT_REVIEWDOG_FLAGS} # || reviewdog_error="true"
+      # if [[ "${PIPESTATUS[0]}" ]]; then
+      #   black_error="true"
+      # fi
   else
     echo "[action-black] Checking python code with the black formatter and reviewdog..."
     black --check --quiet "${black_args}" 2>&1          \
@@ -62,10 +62,10 @@ if [[ "${INPUT_ANNOTATE}" = 'true' ]]; then
       -filter-mode="${INPUT_FILTER_MODE}"               \
       -fail-on-error="${INPUT_FAIL_ON_ERROR}"           \
       -level="${INPUT_LEVEL}"                           \
-      ${INPUT_REVIEWDOG_FLAGS} || reviewdog_error="true"
-      if [[ "${PIPESTATUS[0]}" ]]; then
-        black_error="true"
-      fi
+      ${INPUT_REVIEWDOG_FLAGS} # || reviewdog_error="true"
+      # if [[ "${PIPESTATUS[0]}" ]]; then
+      #   black_error="true"
+      # fi
   fi
 else
   echo "[action-black] Checking python code using the black formatter..."
