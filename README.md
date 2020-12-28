@@ -16,16 +16,23 @@ This action runs the [black formatter](https://github.com/psf/black) with review
 ```yaml
 inputs:
   workdir:
-    description: "Working directory relative to the root directory."
+    description: "Working directory relative to the root directory. Defaults to '.'."
     required: false
     default: "."
   format:
-    description: "Don't write the files back, just return the status."
+    description: |
+      If true, black format files and commit are creatable (use other Action).
+      Defaults to 'false'.
     required: false
-    default: "true"
+    default: "false"
+  fail_on_error:
+    description: |
+      Exit code when black formatting errors are found [true, false]. Defaults to 'false'.
+    required: false
+    default: "false"
   # Reviewdog related inputs
   annotate:
-    description: "Annotate black changes using reviewdog."
+    description: "Annotate black changes using reviewdog. Defaults to 'true'."
     required: false
     default: "true"
   github_token:
@@ -33,17 +40,17 @@ inputs:
     required: true
     default: ${{ github.token }}
   tool_name:
-    description: "Tool name to use for reviewdog reporter"
+    description: "Tool name to use for reviewdog reporter. Defaults to 'black-format'."
     required: false
     default: "black-format"
   level:
-    description: "Report level for reviewdog [info, warning, error]"
+    description: "Report level for reviewdog [info, warning, error]. Defaults to 'error'."
     required: false
     default: "error"
   reporter:
     description: |
       Reporter of reviewdog command [github-pr-check, github-pr-review, github-check].
-      Default is github-pr-check. Github-pr-review is not supported for the black formatter.
+      Defaults to 'github-pr-check'.
     required: false
     default: "github-pr-check"
   filter_mode:
@@ -52,14 +59,8 @@ inputs:
       Default is added.
     required: false
     default: "added"
-  fail_on_error:
-    description: |
-      Exit code for reviewdog when errors are found [true,false]
-      Default is `false`.
-    required: false
-    default: "false"
   reviewdog_flags:
-    description: "Additional reviewdog flags"
+    description: "Additional reviewdog flags."
     required: false
     default: ""
 ```
