@@ -4,8 +4,8 @@
 [![reviewdog](https://github.com/rickstaa/action-black/workflows/reviewdog/badge.svg)](https://github.com/rickstaa/action-black/actions?query=workflow%3Areviewdog)
 [![depup](https://github.com/rickstaa/action-black/workflows/depup/badge.svg)](https://github.com/rickstaa/action-black/actions?query=workflow%3Adepup)
 [![release](https://github.com/rickstaa/action-black/workflows/release/badge.svg)](https://github.com/rickstaa/action-black/actions?query=workflow%3Arelease)
-[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/rickstaa/action-black?logo=github&sort=semver)](https://github.com/rickstaa/action-black/releases)
-[![action-bumpr supported](https://img.shields.io/badge/bumpr-supported-ff69b4?logo=github&link=https://github.com/haya14busa/action-bumpr)](https://github.com/haya14busa/action-bumpr)
+[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/rickstaa/action-black?logo=github\&sort=semver)](https://github.com/rickstaa/action-black/releases)
+[![action-bumpr supported](https://img.shields.io/badge/bumpr-supported-ff69b4?logo=github\&link=https://github.com/haya14busa/action-bumpr)](https://github.com/haya14busa/action-bumpr)
 
 ![github-pr-check demo](https://user-images.githubusercontent.com/17570430/102082175-c6773780-3e11-11eb-9af9-d7ee07ca353a.png)
 

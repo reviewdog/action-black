@@ -30,7 +30,8 @@ if [[ "${INPUT_ANNOTATE}" = 'true' ]]; then
         -level="${INPUT_LEVEL}" \
         -fail-on-error="${INPUT_FAIL_ON_ERROR}" \
         ${INPUT_REVIEWDOG_FLAGS} || reviewdog_error="true"
-    if [[ "${PIPESTATUS[0]}" ]]; then
+    black_exit_val="${PIPESTATUS[0]}"
+    if [[ "${black_exit_val}" -ne "0" ]]; then
       black_error="true"
     fi
   else
@@ -43,7 +44,8 @@ if [[ "${INPUT_ANNOTATE}" = 'true' ]]; then
         -fail-on-error="${INPUT_FAIL_ON_ERROR}" \
         -level="${INPUT_LEVEL}" \
         ${INPUT_REVIEWDOG_FLAGS} || reviewdog_error="true"
-    if [[ "${PIPESTATUS[0]}" ]]; then
+    black_exit_val="${PIPESTATUS[0]}"
+    if [[ "${black_exit_val}" -ne "0" ]]; then
       black_error="true"
     fi
   fi
