@@ -64,7 +64,6 @@ inputs:
     required: false
     default: ""
 ```
-
 ### Docker input args
 
 Besides the aforementioned input arguments you can also supply additional input arguments for the black formatter using the args keyword [run.args](https://docs.github.com/en/free-pro-team@latest/actions/creating-actions/metadata-syntax-for-github-actions#runsargs).
@@ -74,6 +73,14 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
   args: ". --verbose"
+```
+
+## Outputs
+
+```yml
+outputs:
+  is_formatted:
+    description: "Whether the files were formatted using the black formatter."
 ```
 
 ## Basic usage
@@ -99,7 +106,7 @@ jobs:
           level: warning
 ```
 
-## Advance use cases
+## Advanced use cases
 
 This action can be combined with [peter-evans/create-pull-request](https://github.com/peter-evans/create-pull-request) or [stefanzweifel/git-auto-commit-action](https://github.com/stefanzweifel/git-auto-commit-action) to also apply the annotated changes to the repository.
 

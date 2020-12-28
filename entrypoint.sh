@@ -58,9 +58,18 @@ fi
 # NOTE: Useful for writing back changes or creating a pull request.
 if [[ "${INPUT_FORMAT}" = 'true' && "${black_error}" = 'true' ]]; then
   echo "[action-black] Formatting python code using the black formatter..."
-  black "${INPUT_WORKDIR}/${black_args}" || black_error="true"
+  black "${INPUT_WORKDIR}/${black_args}" || black_format_error="true"
+
+  # Check if code was formatted
+  if [[ "${black_format_error}" != "true" ]]; then
+    echo "::set-output name=is_formatted::true"
+  else
+    black_error="${black_format_error}"
+    echo "::set-output name=is_formatted::false"
+  fi
 elif [[ "${INPUT_FORMAT}" = 'true' && "${black_error}" != 'true' ]]; then
   echo "[action-black] Formatting not needed."
+  echo "::set-output name=is_formatted::false"
 fi
 
 # Throw error if an error occurred and fail_on_error is true
