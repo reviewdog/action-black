@@ -7,31 +7,37 @@ fi
 
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
 
-# If no arguments are given use current working directory
-if [[ "$#" -eq 0 ]]; then
-  if [[ "${INPUT_WORKDIR}" = "." || "${INPUT_WORKDIR}" = "" ]]; then
-    black_args="."
-  else
-    black_args="${INPUT_WORKDIR}"
-  fi
-else
-  # Check if cmd line input argscontain non option arguments
-  contains_path="false"
-  for input_arg in "$@"
-  do
-    if [[ "${input_arg}" != -* ]]; then
-      contains_path="true"
-    fi
-  done
+# # If no arguments are given use current working directory
+# if [[ "$#" -eq 0 ]]; then
+#   if [[ "${INPUT_WORKDIR}" = "." || "${INPUT_WORKDIR}" = "" ]]; then
+#     black_args="."
+#   else
+#     black_args="${INPUT_WORKDIR}"
+#   fi
+# else
+#   # Check if cmd line input argscontain non option arguments
+#   contains_path="false"
+#   for input_arg in "$@"
+#   do
+#     if [[ "${input_arg}" != -* ]]; then
+#       contains_path="true"
+#     fi
+#   done
 
-  # Create black input argumnet
-  # NOTE: If workdir is defined it takes precedence over any paths specified in
-  # the container input args.
-  if [[ "${INPUT_WORKDIR}" = "." && "${contains_path}" = 'true' ]]; then
-      black_args="$*"
-  else
-    black_args="${INPUT_WORKDIR} $*"
-  fi
+#   # Create black input argumnet
+#   # NOTE: If workdir is defined it takes precedence over any paths specified in
+#   # the container input args.
+#   if [[ "${INPUT_WORKDIR}" = "." && "${contains_path}" = 'true' ]]; then
+#       black_args="$*"
+#   else
+#     black_args="${INPUT_WORKDIR} $*"
+#   fi
+# fi
+
+if [[ "$#" -eq 0 ]]; then
+  black_args="${INPUT_WORKDIR}/."
+else
+  black_args="${INPUT_WORKDIR}/$*"
 fi
 
 # Run black with reviewdog
