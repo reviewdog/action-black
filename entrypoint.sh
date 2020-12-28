@@ -73,15 +73,15 @@ else
 fi
 
 # Also format code if this is requested
-# NOTE: Usefull for writing back changes or creating a pull request.
+# NOTE: Useful for writing back changes or creating a pull request.
 if [[ "${INPUT_FORMAT}" = 'true'&& "${black_error}" = 'true' ]]; then
   echo "[action-black] Formatting python code using the black formatter..."
-  black "${black_args}" || error_occured="true"
+  black "${black_args}" || error_occurred="true"
 elif [[ "${INPUT_FORMAT}" = 'true' && "${black_error}" != 'true' ]]; then
   echo "[action-black] Formatting not needed."
 fi
 
-# Throw error if an error occured and fail_on_error is true
+# Throw error if an error occurred and fail_on_error is true
 if [[ ( "${reviewdog_error}" = 'true'  || "${black_error}" ) &&  "${INPUT_FAIL_ON_ERROR}" = 'true' ]]; then
   exit 1
 fi
