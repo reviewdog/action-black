@@ -15,7 +15,7 @@ else
 fi
 
 # Run black with reviewdog
-black_error="false"
+black_exit_val="0"
 reviewdog_error="false"
 if [[ "${INPUT_ANNOTATE}" = 'true' ]]; then
   if [[ "${INPUT_REPORTER}" = 'github-pr-review' ]]; then
@@ -31,8 +31,15 @@ if [[ "${INPUT_ANNOTATE}" = 'true' ]]; then
         -fail-on-error="${INPUT_FAIL_ON_ERROR}"             \
         ${INPUT_REVIEWDOG_FLAGS} || reviewdog_error="true"
     black_exit_val="${PIPESTATUS[0]}"
-    if [[ "${black_exit_val}" -ne "0" ]]; then
+
+    # Check whether black found formatting errors
+    if [[ "${black_exit_val}" -eq "0" ]]; then
+      black_error="false"
+    elif [[ "${black_exit_val}" -eq "1" ]]; then
       black_error="true"
+    else
+      echo "Something went wrong while trying to run the black command (error code: ${black_exit_val})."
+      exit 1
     fi
   else
     echo "[action-black] Checking python code with the black formatter and reviewdog..."
@@ -45,30 +52,53 @@ if [[ "${INPUT_ANNOTATE}" = 'true' ]]; then
         -level="${INPUT_LEVEL}"                             \
         ${INPUT_REVIEWDOG_FLAGS} || reviewdog_error="true"
     black_exit_val="${PIPESTATUS[0]}"
-    if [[ "${black_exit_val}" -ne "0" ]]; then
+
+    # Check whether black found formatting errors
+    if [[ "${black_exit_val}" -eq "0" ]]; then
+      black_error="false"
+    elif [[ "${black_exit_val}" -eq "1" ]]; then
       black_error="true"
+    else
+      echo "[action-black] ERROR: Something went wrong while trying to run the black formatter (error code: ${black_exit_val})."
+      exit 1
     fi
   fi
 else
   echo "[action-black] Checking python code using the black formatter..."
-  black --check "${INPUT_WORKDIR}/${black_args}" 2>&1 || black_error="true"
+  black --check "${INPUT_WORKDIR}/${black_args}" 2>&1 || black_exit_val="$?"
+
+  # Check whether black found formatting errors
+  if [[ "${black_exit_val}" -eq "0" ]]; then
+    black_error="false"
+  elif [[ "${black_exit_val}" -eq "1" ]]; then
+    black_error="true"
+  else
+    echo "[action-black] ERROR: Something went wrong while trying to run the black formatter (error code: ${black_exit_val})."
+    exit 1
+  fi
 fi
 
 # Also format code if this is requested
 # NOTE: Useful for writing back changes or creating a pull request.
+black_format_exit_val="0"
 if [[ "${INPUT_FORMAT}" = 'true' && "${black_error}" = 'true' ]]; then
   echo "[action-black] Formatting python code using the black formatter..."
-  black "${INPUT_WORKDIR}/${black_args}" || black_format_error="true"
+  black "${INPUT_WORKDIR}/${black_args}" || black_format_exit_val="$?"
 
-  # Check if code was formatted
-  if [[ "${black_format_error}" != "true" ]]; then
+  # Check whether black found formatting errors
+  if [[ "${black_format_exit_val}" -eq "0" ]]; then
     echo "::set-output name=is_formatted::true"
-  else
-    black_error="${black_format_error}"
+  elif [[ "${black_format_exit_val}" -eq "1" ]]; then
+    black_error="true"
     echo "::set-output name=is_formatted::false"
+  else
+    echo "[action-black] ERROR: Something went wrong while trying to run the black formatter (error code: ${black_exit_val})."
+    exit 1
   fi
 elif [[ "${INPUT_FORMAT}" = 'true' && "${black_error}" != 'true' ]]; then
   echo "[action-black] Formatting not needed."
+  echo "::set-output name=is_formatted::false"
+else
   echo "::set-output name=is_formatted::false"
 fi
 
