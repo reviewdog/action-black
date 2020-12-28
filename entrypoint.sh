@@ -19,7 +19,7 @@ black_error="false"
 reviewdog_error="false"
 if [[ "${INPUT_ANNOTATE}" = 'true' ]]; then
   if [[ "${INPUT_REPORTER}" = 'github-pr-review' ]]; then
-    echo "[action-black] Checking python code with the black formatter2 and reviewdog..."
+    echo "[action-black] Checking python code with the black formatter and reviewdog..."
     # work only fix diff suggestion
     black --diff --quiet "${INPUT_WORKDIR}/${black_args}" 2>&1 \
       | reviewdog -f="diff"                                    \
@@ -29,10 +29,10 @@ if [[ "${INPUT_ANNOTATE}" = 'true' ]]; then
       -filter-mode="diff_context"                              \
       -level="${INPUT_LEVEL}"                                  \
       -fail-on-error="${INPUT_FAIL_ON_ERROR}"                  \
-      ${INPUT_REVIEWDOG_FLAGS} # || reviewdog_error="true"
-      # if [[ "${PIPESTATUS[0]}" ]]; then
-      #   black_error="true"
-      # fi
+      ${INPUT_REVIEWDOG_FLAGS} || reviewdog_error="true"
+      if [[ "${PIPESTATUS[0]}" ]]; then
+        black_error="true"
+      fi
   else
     echo "[action-black] Checking python code with the black formatter and reviewdog..."
     black --check "${INPUT_WORKDIR}/${black_args}" 2>&1 \
