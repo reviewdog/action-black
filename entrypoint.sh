@@ -76,7 +76,7 @@ fi
 # NOTE: Useful for writing back changes or creating a pull request.
 if [[ "${INPUT_FORMAT}" = 'true'&& "${black_error}" = 'true' ]]; then
   echo "[action-black] Formatting python code using the black formatter..."
-  black "${black_args}" || error_occurred="true"
+  black "${black_args}" || black_error="true"
 elif [[ "${INPUT_FORMAT}" = 'true' && "${black_error}" != 'true' ]]; then
   echo "[action-black] Formatting not needed."
 fi
