@@ -98,6 +98,8 @@ if [[ "${INPUT_FORMAT}" = 'true' && "${black_error}" = 'true' ]]; then
 elif [[ "${INPUT_FORMAT}" = 'true' && "${black_error}" != 'true' ]]; then
   echo "[action-black] Formatting not needed."
   echo "::set-output name=is_formatted::false"
+else
+  echo "::set-output name=is_formatted::false"
 fi
 
 # Throw error if an error occurred and fail_on_error is true
