@@ -27,6 +27,13 @@ jobs:
           reporter: github-check
           level: info
           format: true
+      - name: Check if formatting was successful
+        run: |
+          changed_files=$(git status --porcelain --untracked-files=no | wc -l)
+          if [[ ${changed_files} -eq 0 ]]; then
+            echo "No changes detected!"
+            exit 1
+          fi
 
   test-pr-check:
     if: github.event_name == 'pull_request'
@@ -54,6 +61,13 @@ jobs:
           level: warning
           workdir: ./testdata/subfolder/
           format: true
+      - name: Check if formatting was successful
+        run: |
+          changed_files=$(git status --porcelain --untracked-files=no | wc -l)
+          if [[ ${changed_files} -eq 0 ]]; then
+            echo "No changes detected!"
+            exit 1
+          fi
 
   test-pr-review:
     if: github.event_name == 'pull_request'
@@ -81,3 +95,10 @@ jobs:
           level: error
           reviewdog_flags: -filter-mode=file -fail-on-error
           format: true
+      - name: Check if formatting was successful
+        run: |
+          changed_files=$(git status --porcelain --untracked-files=no | wc -l)
+          if [[ ${changed_files} -eq 0 ]]; then
+            echo "No changes detected!"
+            exit 1
+          fi
