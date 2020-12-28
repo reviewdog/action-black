@@ -92,7 +92,7 @@ if [[ "${INPUT_FORMAT}" = 'true' && "${black_error}" = 'true' ]]; then
     black_error="true"
     echo "::set-output name=is_formatted::false"
   else
-    echo "[action-black] ERROR: Something went wrong while trying to run the black formatter (error code: ${black_exit_val})."
+    echo "[action-black] ERROR: Something went wrong while trying to run the black formatter (error code: ${black_format_exit_val})."
     exit 1
   fi
 elif [[ "${INPUT_FORMAT}" = 'true' && "${black_error}" != 'true' ]]; then
