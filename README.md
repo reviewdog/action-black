@@ -140,7 +140,7 @@ jobs:
   steps:
     - uses: actions/checkout@v2
     - name: Check files using black formatter
-      uses: reviewdog/action-black@v1.1.2
+      uses: reviewdog/action-black@v1
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         reporter: github-check
