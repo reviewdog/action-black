@@ -115,7 +115,7 @@ jobs:
       with:
         ref: ${{ github.head_ref }}
     - name: Check files using black formatter
-      uses: reviewdog/action-black@v1.1.2
+      uses: reviewdog/action-black@v1
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         reporter: github-check
