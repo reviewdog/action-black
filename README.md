@@ -106,7 +106,7 @@ jobs:
           level: warning
 ```
 
-## Advance use cases
+## Advanced use cases
 
 This action can be combined with [peter-evans/create-pull-request](https://github.com/peter-evans/create-pull-request) or [stefanzweifel/git-auto-commit-action](https://github.com/stefanzweifel/git-auto-commit-action) to also apply the annotated changes to the repository.
 
