@@ -50,6 +50,9 @@ inputs:
     description: "Additional reviewdog flags."
     required: false
     default: ""
+outputs:
+  is_formatted:
+    description: "Whether the files were formatted using the black formatter."
 runs:
   using: "docker"
   image: "Dockerfile"
