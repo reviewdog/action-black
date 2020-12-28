@@ -45,9 +45,9 @@ black_error="false"
 reviewdog_error="false"
 if [[ "${INPUT_ANNOTATE}" = 'true' ]]; then
   if [[ "${INPUT_REPORTER}" = 'github-pr-review' ]]; then
-    echo "[action-black] Checking python code with the black formatter and reviewdog..."
+    echo "[action-black] Checking python code with the black formatter2 and reviewdog..."
     # work only fix diff suggestion
-    black --diff --quiet "${INPUT_WORKDIR}/${input_args}" 2>&1                  \
+    black --diff --quiet "${INPUT_WORKDIR}/${input_args}" 2>&1 \
       | reviewdog -f="diff"                                    \
       -f.diff.strip=0                                          \
       -name="${INPUT_TOOL_NAME}-fix"                           \
@@ -68,10 +68,10 @@ if [[ "${INPUT_ANNOTATE}" = 'true' ]]; then
       -filter-mode="${INPUT_FILTER_MODE}"               \
       -fail-on-error="${INPUT_FAIL_ON_ERROR}"           \
       -level="${INPUT_LEVEL}"                           \
-      ${INPUT_REVIEWDOG_FLAGS} # || reviewdog_error="true"
-      # if [[ "${PIPESTATUS[0]}" ]]; then
-      #   black_error="true"
-      # fi
+      ${INPUT_REVIEWDOG_FLAGS} || reviewdog_error="true"
+      if [[ "${PIPESTATUS[0]}" ]]; then
+        black_error="true"
+      fi
   fi
 else
   echo "[action-black] Checking python code using the black formatter..."
@@ -82,7 +82,7 @@ fi
 # NOTE: Useful for writing back changes or creating a pull request.
 if [[ "${INPUT_FORMAT}" = 'true'&& "${black_error}" = 'true' ]]; then
   echo "[action-black] Formatting python code using the black formatter..."
-  black "${INPUT_WORKDIR}/${input_args}" #|| black_error="true"
+  black "${INPUT_WORKDIR}/${input_args}" || black_error="true"
 elif [[ "${INPUT_FORMAT}" = 'true' && "${black_error}" != 'true' ]]; then
   echo "[action-black] Formatting not needed."
 fi
