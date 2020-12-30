@@ -41,7 +41,7 @@ if [[ "${INPUT_ANNOTATE,,}" = 'true' ]]; then
     # Remove '-q' and '--quiet' form the black arguments
     # NOTE: Having these flags in the action prevents the action from working.
     black_args_tmp=()
-    for item in ${black_args[@]}; do
+    for item in "${black_args[@]}"; do
       if [[ "${item}" != "-q" && "${item}" != "--quiet" ]]; then
         black_args_tmp+=("${item}") #Quotes when working with strings
       fi
