@@ -3,25 +3,28 @@ set -eu # Increase bash strictness
 set -o pipefail
 
 if [[ -n "${GITHUB_WORKSPACE}" ]]; then
-  cd "${GITHUB_WORKSPACE}" || exit
+  cd "${GITHUB_WORKSPACE}/${INPUT_WORKDIR}" || exit
 fi
 
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
 
 # If no arguments are given use current working directory
-if [[ "$#" -eq 0 ]]; then
-  black_args="."
-else
-  black_args="$*"
+black_args=(".")
+if [[ "$#" -eq 0 && "${INPUT_BLACK_FLAGS}" != "" ]]; then
+  black_args+=(${INPUT_BLACK_FLAGS})
+elif [[ "$#" -ne 0 && "${INPUT_BLACK_FLAGS}" != "" ]]; then
+  black_args+=($* ${INPUT_BLACK_FLAGS})
+elif [[ "$#" -ne 0 && "${INPUT_BLACK_FLAGS}" == "" ]]; then
+  black_args+=($*)
 fi
 
 # Run black with reviewdog
 black_exit_val="0"
 reviewdog_exit_val="0"
-if [[ "${INPUT_ANNOTATE}" = 'true' ]]; then
+if [[ "${INPUT_ANNOTATE,,}" = 'true' ]]; then
   if [[ "${INPUT_REPORTER}" = 'github-pr-review' ]]; then
     echo "[action-black] Checking python code with the black formatter and reviewdog..."
-    black_check_output="$(black --diff --quiet --check ${INPUT_WORKDIR}/${black_args})" ||
+    black_check_output=$(black --diff --quiet --check ${black_args[@]}) ||
       black_exit_val="$?"
 
     # Intput black formatter output to reviewdog
@@ -34,8 +37,18 @@ if [[ "${INPUT_ANNOTATE}" = 'true' ]]; then
       -fail-on-error="${INPUT_FAIL_ON_ERROR}" \
       ${INPUT_REVIEWDOG_FLAGS} || reviewdog_exit_val="$?"
   else
+
+    # Remove '-q' and '--quiet' form the black arguments
+    # NOTE: Having these flags in the action prevents the action from working.
+    black_args_tmp=()
+    for item in ${black_args[@]}; do
+      if [[ "${item}" != "-q" && "${item}" != "--quiet" ]]; then
+        black_args_tmp+=("${item}") #Quotes when working with strings
+      fi
+    done
+
     echo "[action-black] Checking python code with the black formatter and reviewdog..."
-    black_check_output="$(black --check ${INPUT_WORKDIR}/${black_args} 2>&1)" ||
+    black_check_output=$(black --check ${black_args_tmp[@]} 2>&1) ||
       black_exit_val="$?"
 
     # Intput black formatter output to reviewdog
@@ -49,7 +62,7 @@ if [[ "${INPUT_ANNOTATE}" = 'true' ]]; then
   fi
 else
   echo "[action-black] Checking python code using the black formatter..."
-  black --check "${INPUT_WORKDIR}/${black_args}" 2>&1 || black_exit_val="$?"
+  black --check ${black_args[@]} 2>&1 || black_exit_val="$?"
 fi
 
 # Check for black/reviewdog errors
@@ -86,9 +99,9 @@ fi
 # Also format code if this is requested
 # NOTE: Useful for writing back changes or creating a pull request.
 black_format_exit_val="0"
-if [[ "${INPUT_FORMAT}" = 'true' && "${black_error}" = 'true' ]]; then
+if [[ "${INPUT_FORMAT,,}" = 'true' && "${black_error}" = 'true' ]]; then
   echo "[action-black] Formatting python code using the black formatter..."
-  black "${INPUT_WORKDIR}/${black_args}" || black_format_exit_val="$?"
+  black ${black_args[@]} || black_format_exit_val="$?"
 
   # Check whether black formatting was succesfull
   if [[ "${black_format_exit_val}" -eq "0" ]]; then
@@ -101,7 +114,7 @@ if [[ "${INPUT_FORMAT}" = 'true' && "${black_error}" = 'true' ]]; then
       "black formatter (error code: ${black_format_exit_val})."
     exit 1
   fi
-elif [[ "${INPUT_FORMAT}" = 'true' && "${black_error}" = 'false' ]]; then
+elif [[ "${INPUT_FORMAT,,}" = 'true' && "${black_error}" = 'false' ]]; then
   echo "[action-black] Formatting not needed."
   echo "::set-output name=is_formatted::false"
 else
