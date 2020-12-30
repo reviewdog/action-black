@@ -30,6 +30,10 @@ inputs:
       Exit code when black formatting errors are found [true, false]. Defaults to 'false'.
     required: false
     default: "false"
+  black_flags:
+    description: "Additional black flags."
+    required: false
+    default: ""
   # Reviewdog related inputs
   annotate:
     description: "Annotate black changes using reviewdog. Defaults to 'true'."
@@ -63,17 +67,6 @@ inputs:
     description: "Additional reviewdog flags."
     required: false
     default: ""
-```
-
-### Docker input args
-
-Besides the aforementioned input arguments you can also supply additional input arguments for the black formatter using the args keyword [run.args](https://docs.github.com/en/free-pro-team@latest/actions/creating-actions/metadata-syntax-for-github-actions#runsargs).
-
-```yaml
-runs:
-  using: 'docker'
-  image: 'Dockerfile'
-  args: ". --verbose"
 ```
 
 ## Outputs

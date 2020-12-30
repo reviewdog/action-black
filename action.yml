@@ -17,6 +17,10 @@ inputs:
       Exit code when black formatting errors are found [true, false]. Defaults to 'false'.
     required: false
     default: "false"
+  black_flags:
+    description: "Additional black flags."
+    required: false
+    default: ""
   # Reviewdog related inputs
   annotate:
     description: "Annotate black changes using reviewdog. Defaults to 'true'."
