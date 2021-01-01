@@ -34,7 +34,7 @@ if [[ "${INPUT_ANNOTATE,,}" = 'true' ]]; then
       -reporter="github-pr-review" \
       -filter-mode="diff_context" \
       -level="${INPUT_LEVEL}" \
-      -fail-on-error="${INPUT_FAIL_ON_ERROR}" \
+      -fail-on-error="${INPUT_FAIL_ON_ERROR,,}" \
       ${INPUT_REVIEWDOG_FLAGS} || reviewdog_exit_val="$?"
   else
 
@@ -56,7 +56,7 @@ if [[ "${INPUT_ANNOTATE,,}" = 'true' ]]; then
       -name="${INPUT_TOOL_NAME}" \
       -reporter="${INPUT_REPORTER}" \
       -filter-mode="${INPUT_FILTER_MODE}" \
-      -fail-on-error="${INPUT_FAIL_ON_ERROR}" \
+      -fail-on-error="${INPUT_FAIL_ON_ERROR,,}" \
       -level="${INPUT_LEVEL}" \
       ${INPUT_REVIEWDOG_FLAGS} || reviewdog_exit_val="$?"
   fi
@@ -122,7 +122,8 @@ else
 fi
 
 # Throw error if an error occurred and fail_on_error is true
-if [[ ("${black_error}" = 'true' || "${reviewdog_error}" = 'true') && \
-  "${INPUT_FAIL_ON_ERROR}" = 'true' ]]; then
+if [[ "${INPUT_FAIL_ON_ERROR,,}" = 'true' && (\
+  "${INPUT_ANNOTATE,,}" = 'false' && "${black_error}" = 'true' || \
+  "${reviewdog_error}" = 'true') ]]; then
   exit 1
 fi
