@@ -15,6 +15,7 @@ jobs:
           github_token: ${{ secrets.github_token }}
           reporter: github-check
           level: info
+          workdir: ./testdata/
 
   test-check-format:
     name: runner / black-format (github-check-format)
@@ -27,6 +28,7 @@ jobs:
           reporter: github-check
           level: info
           format: true
+          workdir: ./testdata/
       - name: Check if formatting was successful
         run: |
           changed_files=$(git status --porcelain --untracked-files=no | wc -l)
@@ -46,7 +48,7 @@ jobs:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-check
           level: warning
-          workdir: ./testdata/subfolder/
+          workdir: ./testdata/
 
   test-pr-check-format:
     if: github.event_name == 'pull_request'
@@ -59,8 +61,8 @@ jobs:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-check
           level: warning
-          workdir: ./testdata/subfolder/
           format: true
+          workdir: ./testdata/
       - name: Check if formatting was successful
         run: |
           changed_files=$(git status --porcelain --untracked-files=no | wc -l)
@@ -81,6 +83,7 @@ jobs:
           reporter: github-pr-review
           level: error
           reviewdog_flags: -filter-mode=file -fail-on-error
+          workdir: ./testdata/
 
   test-pr-review-format:
     if: github.event_name == 'pull_request'
@@ -95,6 +98,7 @@ jobs:
           level: error
           reviewdog_flags: -filter-mode=file -fail-on-error
           format: true
+          workdir: ./testdata/
       - name: Check if formatting was successful
         run: |
           changed_files=$(git status --porcelain --untracked-files=no | wc -l)
