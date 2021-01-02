@@ -35,6 +35,8 @@ jobs:
           if [[ ${changed_files} -eq 0 ]]; then
             echo "No changes detected!"
             exit 1
+          else
+            echo "Changes detected!"
           fi
 
   test-pr-check:
@@ -69,6 +71,8 @@ jobs:
           if [[ ${changed_files} -eq 0 ]]; then
             echo "No changes detected!"
             exit 1
+          else
+            echo "Changes detected!"
           fi
 
   test-pr-review:
@@ -105,4 +109,6 @@ jobs:
           if [[ ${changed_files} -eq 0 ]]; then
             echo "No changes detected!"
             exit 1
+          else
+            echo "Changes detected!"
           fi
