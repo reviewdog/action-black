@@ -16,6 +16,15 @@ jobs:
           reporter: github-check
           level: info
           workdir: ./testdata/
+      - name: Check if code is left untouched (not formatted)
+        run: |
+          changed_files=$(git status --porcelain | wc -l)
+          if [[ ${changed_files} -eq 0 ]]; then
+            echo "No changes detected!"
+          else
+            echo "Changes detected!"
+            exit 1
+          fi
 
   test-check-format:
     name: runner / black-format (github-check-format)
@@ -31,7 +40,7 @@ jobs:
           workdir: ./testdata/
       - name: Check if formatting was successful
         run: |
-          changed_files=$(git status --porcelain --untracked-files=no | wc -l)
+          changed_files=$(git status --porcelain | wc -l)
           if [[ ${changed_files} -eq 0 ]]; then
             echo "No changes detected!"
             exit 1
@@ -51,6 +60,15 @@ jobs:
           reporter: github-pr-check
           level: warning
           workdir: ./testdata/
+      - name: Check if code is left untouched (not formatted)
+        run: |
+          changed_files=$(git status --porcelain | wc -l)
+          if [[ ${changed_files} -eq 0 ]]; then
+            echo "No changes detected!"
+          else
+            echo "Changes detected!"
+            exit 1
+          fi
 
   test-pr-check-format:
     if: github.event_name == 'pull_request'
@@ -67,7 +85,7 @@ jobs:
           workdir: ./testdata/
       - name: Check if formatting was successful
         run: |
-          changed_files=$(git status --porcelain --untracked-files=no | wc -l)
+          changed_files=$(git status --porcelain | wc -l)
           if [[ ${changed_files} -eq 0 ]]; then
             echo "No changes detected!"
             exit 1
@@ -88,6 +106,15 @@ jobs:
           level: error
           reviewdog_flags: -filter-mode=file -fail-on-error
           workdir: ./testdata/
+      - name: Check if code is left untouched (not formatted)
+        run: |
+          changed_files=$(git status --porcelain | wc -l)
+          if [[ ${changed_files} -eq 0 ]]; then
+            echo "No changes detected!"
+          else
+            echo "Changes detected!"
+            exit 1
+          fi
 
   test-pr-review-format:
     if: github.event_name == 'pull_request'
@@ -105,7 +132,7 @@ jobs:
           workdir: ./testdata/
       - name: Check if formatting was successful
         run: |
-          changed_files=$(git status --porcelain --untracked-files=no | wc -l)
+          changed_files=$(git status --porcelain | wc -l)
           if [[ ${changed_files} -eq 0 ]]; then
             echo "No changes detected!"
             exit 1
