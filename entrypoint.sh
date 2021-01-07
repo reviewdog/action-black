@@ -60,9 +60,6 @@ else
     ${INPUT_REVIEWDOG_FLAGS} || reviewdog_exit_val="$?"
 fi
 
-black_exit_val="2"
-reviewdog_exit_val="2"
-
 # Check for black/reviewdog errors
 if [[ "${black_exit_val}" -eq "0" && "${reviewdog_exit_val}" -eq "0" ]]; then
   black_error="false"
