@@ -23,7 +23,7 @@ black_exit_val="0"
 reviewdog_exit_val="0"
 if [[ "${INPUT_REPORTER}" = 'github-pr-review' ]]; then
   echo "[action-black] Checking python code with the black formatter and reviewdog..."
-  black_check_output=$(black --diff --quiet --check ${black_args[@]}) ||
+  black_check_output="$(black --diff --quiet --check ${black_args[*]})" ||
     black_exit_val="$?"
 
   # Intput black formatter output to reviewdog
@@ -47,7 +47,7 @@ else
   done
 
   echo "[action-black] Checking python code with the black formatter and reviewdog..."
-  black_check_output=$(black --check ${black_args_tmp[@]} 2>&1) ||
+  black_check_output="$(black --check ${black_args_tmp[*]} 2>&1)" ||
     black_exit_val="$?"
 
   # Intput black formatter output to reviewdog
