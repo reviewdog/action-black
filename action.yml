@@ -6,12 +6,6 @@ inputs:
     description: "Working directory relative to the root directory. Defaults to '.'."
     required: false
     default: "."
-  format:
-    description: |
-      If true, black format files and commit are creatable (use other Action).
-      Defaults to 'false'.
-    required: false
-    default: "false"
   fail_on_error:
     description: |
       Exit code when black formatting errors are found [true, false]. Defaults to 'false'.
@@ -22,10 +16,6 @@ inputs:
     required: false
     default: ""
   # Reviewdog related inputs
-  annotate:
-    description: "Annotate black changes using reviewdog. Defaults to 'true'."
-    required: false
-    default: "true"
   github_token:
     description: "The automatically created secret github action token."
     required: true
@@ -54,9 +44,6 @@ inputs:
     description: "Additional reviewdog flags."
     required: false
     default: ""
-outputs:
-  is_formatted:
-    description: "Whether the files were formatted using the black formatter."
 runs:
   using: "docker"
   image: "Dockerfile"
