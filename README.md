@@ -1,10 +1,10 @@
 # Black action
 
-[![Test](https://github.com/rickstaa/action-black/workflows/Test/badge.svg)](https://github.com/rickstaa/action-black/actions?query=workflow%3ATest)
-[![reviewdog](https://github.com/rickstaa/action-black/workflows/reviewdog/badge.svg)](https://github.com/rickstaa/action-black/actions?query=workflow%3Areviewdog)
-[![depup](https://github.com/rickstaa/action-black/workflows/depup/badge.svg)](https://github.com/rickstaa/action-black/actions?query=workflow%3Adepup)
-[![release](https://github.com/rickstaa/action-black/workflows/release/badge.svg)](https://github.com/rickstaa/action-black/actions?query=workflow%3Arelease)
-[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/rickstaa/action-black?logo=github\&sort=semver)](https://github.com/rickstaa/action-black/releases)
+[![Test](https://github.com/reviewdog/action-black/workflows/Test/badge.svg)](https://github.com/reviewdog/action-black/actions?query=workflow%3ATest)
+[![reviewdog](https://github.com/reviewdog/action-black/workflows/reviewdog/badge.svg)](https://github.com/reviewdog/action-black/actions?query=workflow%3Areviewdog)
+[![depup](https://github.com/reviewdog/action-black/workflows/depup/badge.svg)](https://github.com/reviewdog/action-black/actions?query=workflow%3Adepup)
+[![release](https://github.com/reviewdog/action-black/workflows/release/badge.svg)](https://github.com/reviewdog/action-black/actions?query=workflow%3Arelease)
+[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/reviewdog/action-black?logo=github\&sort=semver)](https://github.com/reviewdog/action-black/releases)
 [![action-bumpr supported](https://img.shields.io/badge/bumpr-supported-ff69b4?logo=github\&link=https://github.com/haya14busa/action-bumpr)](https://github.com/haya14busa/action-bumpr)
 
 ![github-pr-check demo](https://user-images.githubusercontent.com/17570430/102082175-c6773780-3e11-11eb-9af9-d7ee07ca353a.png)
@@ -83,4 +83,4 @@ Default is github-pr-check. github-pr-review can use Markdown and add a link to 
 
 ## Format your code
 
-This action is meant to annotate any possible changes that would need to be made to make your code adhere to the [black formatting guidelines](github.com/psf/black). It does not apply these changes to your codebase. If you also want to apply the changes to your repository, you can use the [reviewdog/action-suggester](https://github.com/reviewdog/action-suggester). You can find examples of how this is done can be found in [rickstaa/action-black](https://github.com/rickstaa/action-black/)
+This action is meant to annotate any possible changes that would need to be made to make your code adhere to the [black formatting guidelines](github.com/psf/black). It does not apply these changes to your codebase. If you also want to apply the changes to your repository, you can use the [reviewdog/action-suggester](https://github.com/reviewdog/action-suggester). You can find examples of how this is done can be found in [reviewdog/action-black](https://github.com/reviewdog/action-black/)
