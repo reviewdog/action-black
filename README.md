@@ -13,7 +13,7 @@ This action runs the [black formatter](https://github.com/psf/black) with review
 
 ## Quick start
 
-In it's simplest form this action can be used to annotate the changes the black formatter would make if it was run on the code.
+In it's simplest form this action can be used to annotate the changes the [black](https://github.com/psf/black) formatter would make if it was run on the code.
 
 ```yaml
 name: reviewdog
@@ -83,4 +83,4 @@ Default is github-pr-check. github-pr-review can use Markdown and add a link to 
 
 ## Format your code
 
-This action is meant to annotate any possible changes that would need to be made to make your code adhere to the [black formatting guidelines](github.com/psf/black). It does not apply these changes to your codebase. If you also want to apply the changes to your repository, you can use the [reviewdog/action-suggester](https://github.com/reviewdog/action-suggester). You can find examples of how this is done can be found in [reviewdog/action-black](https://github.com/reviewdog/action-black/)
+This action is meant to annotate any possible changes that would need to be made to make your code adhere to the [black formatting guidelines](github.com/psf/black). It does not apply these changes to your codebase. If you also want to apply the changes to your repository, you can use the [reviewdog/action-suggester](https://github.com/reviewdog/action-suggester). You can find examples of how this is done can be found in [rickstaa/action-black](https://github.com/rickstaa/action-black/)
