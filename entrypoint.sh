@@ -1,4 +1,6 @@
 #!/bin/bash
+# NOTE: ${VAR,,} Is bash 4.0 syntax to make strings lowercase.
+
 set -eu # Increase bash strictness
 set -o pipefail
 
@@ -29,7 +31,7 @@ if [[ "${INPUT_REPORTER}" = 'github-pr-review' ]]; then
   # Intput black formatter output to reviewdog
   echo "${black_check_output}" | reviewdog -f="diff" \
     -f.diff.strip=0 \
-    -name="${INPUT_TOOL_NAME}-fix" \
+    -name="${INPUT_TOOL_NAME}" \
     -reporter="github-pr-review" \
     -filter-mode="diff_context" \
     -level="${INPUT_LEVEL}" \

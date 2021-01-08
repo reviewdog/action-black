@@ -38,27 +38,22 @@ jobs:
 
 ### `github_token`
 
-**Required**. Must be in form of `github_token: ${{ secrets.github_token }}`'.
+**Required**. The [GITHUB_TOKEN](https://docs.github.com/en/free-pro-team@latest/actions/reference/authentication-in-a-workflow). Must be in form of `github_token: ${{ secrets.github_token }}`. Defaults to `${{ github.token }}`.
 
 ### `workdir`
 
 **Optional**. The directory to run remark-lint in. Defaults to `.`.
 
-### `format`
-
-**Optional**. If true, remark-lint format files and commit are creatable (use other Action). Defaults to `false`.
-
 #### `fail_on_error`
 
-**Optional**. Exit code for when remark-lint errors are found \[`true`, `false`]. Defaults to `false`.
+**Optional**. Exit code for when remark-lint errors are found `[true, false]`. Defaults to `false`.
 
 #### `black_flags`
 
 **Optional**. Additional black flags. Defaults to `""`.
 
-### `annotate`
-
-**Optional**. Annotate remark-lint changes using reviewdog. Defaults to `true`.
+| :warning: | Because this action uses the black output to create the annotations, it does not work with the black `--quiet` flag.|
+|-----------|---------------------------------------------------------------------------------------------------------------------|
 
 #### `tool_name`
 
@@ -66,16 +61,16 @@ jobs:
 
 ### `level`
 
-**Optional**. Report level for reviewdog \[info, warning, error]. It's same as `-level` flag of reviewdog. Defaults to `error`.
+**Optional**. Report level for reviewdog `[info, warning, error]`. It's same as `-level` flag of reviewdog. Defaults to `error`.
 
 ### `reporter`
 
-**Optional**. Reporter of reviewdog command \[github-pr-check, github-pr-review, github-check].
+**Optional**. Reporter of reviewdog command `[github-pr-check, github-pr-review, github-check]`.
 Default is github-pr-check. github-pr-review can use Markdown and add a link to rule page in reviewdog reports.
 
 ### `filter_mode`
 
-**Optional**. Filtering mode for the reviewdog command \[added, diff_context, file, nofilter]. Defaults to `"added"`.
+**Optional**. Filtering mode for the reviewdog command `[added, diff_context, file, nofilter]`. Defaults to `added`.
 
 ### `reviewdog_flags`
 

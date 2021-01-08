@@ -17,7 +17,9 @@ inputs:
     default: ""
   # Reviewdog related inputs
   github_token:
-    description: "The automatically created secret github action token."
+    description: |
+      The GITHUB_TOKEN.  Must be in form of 'github_token: ${{ secrets.github_token }}'.
+      Defaults to '${{ github.token }}''. Defaults to '${{ github.token }}'.
     required: true
     default: ${{ github.token }}
   tool_name:
