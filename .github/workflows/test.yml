@@ -38,15 +38,6 @@ jobs:
           reporter: github-pr-check
           level: warning
           workdir: ./testdata/
-      - name: Check if code is left untouched (not formatted)
-        run: |
-          changed_files=$(git status --porcelain | wc -l)
-          if [[ ${changed_files} -eq 0 ]]; then
-            echo "No changes detected!"
-          else
-            echo "Changes detected!"
-            exit 1
-          fi
 
   test-pr-review:
     if: github.event_name == 'pull_request'
@@ -61,12 +52,3 @@ jobs:
           level: error
           reviewdog_flags: -filter-mode=file -fail-on-error
           workdir: ./testdata/
-      - name: Check if code is left untouched (not formatted)
-        run: |
-          changed_files=$(git status --porcelain | wc -l)
-          if [[ ${changed_files} -eq 0 ]]; then
-            echo "No changes detected!"
-          else
-            echo "Changes detected!"
-            exit 1
-          fi
