@@ -44,10 +44,6 @@ jobs:
 
 **Optional**. The directory to run remark-lint in. Defaults to `.`.
 
-#### `fail_on_error`
-
-**Optional**. Exit code for when remark-lint errors are found `[true, false]`. Defaults to `false`.
-
 #### `black_flags`
 
 **Optional**. Additional black flags. Defaults to `""`.
@@ -71,6 +67,10 @@ Default is github-pr-check. github-pr-review can use Markdown and add a link to 
 ### `filter_mode`
 
 **Optional**. Filtering mode for the reviewdog command `[added, diff_context, file, nofilter]`. Defaults to `added`.
+
+#### `fail_on_error`
+
+**Optional**. Exit code for when reviewdog when errors are found `[true, false]`. Defaults to `false`.
 
 ### `reviewdog_flags`
 

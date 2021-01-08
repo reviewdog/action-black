@@ -39,15 +39,6 @@ if [[ "${INPUT_REPORTER}" = 'github-pr-review' ]]; then
     ${INPUT_REVIEWDOG_FLAGS} || reviewdog_exit_val="$?"
 else
 
-  # Remove '-q' and '--quiet' form the black arguments
-  # NOTE: Having these flags in the action prevents the action from working.
-  black_args_tmp=()
-  for item in "${black_args[@]}"; do
-    if [[ "${item}" != "-q" && "${item}" != "--quiet" ]]; then
-      black_args_tmp+=("${item}") #Quotes when working with strings
-    fi
-  done
-
   echo "[action-black] Checking python code with the black formatter and reviewdog..."
   black_check_output="$(black --check ${black_args_tmp[*]} 2>&1)" ||
     black_exit_val="$?"
@@ -62,53 +53,17 @@ else
     ${INPUT_REVIEWDOG_FLAGS} || reviewdog_exit_val="$?"
 fi
 
-# Check for black/reviewdog errors
-if [[ "${black_exit_val}" -eq "0" && "${reviewdog_exit_val}" -eq "0" ]]; then
-  black_error="false"
-  reviewdog_error="false"
-elif [[ "${black_exit_val}" -eq "1" && "${reviewdog_exit_val}" -eq "0" ]]; then
-  black_error="true"
-  reviewdog_error="false"
-elif [[ "${black_exit_val}" -eq "1" && "${reviewdog_exit_val}" -eq "1" ]]; then
-  black_error="true"
-  reviewdog_error="true"
-elif [[ "${black_exit_val}" -eq "0" && "${reviewdog_exit_val}" -eq "1" ]]; then
-  black_error="false"
-  reviewdog_error="true"
-elif [[ "${black_exit_val}" -eq "123" && "${reviewdog_exit_val}" -eq "1" ]]; then
-  black_error="true"
-  reviewdog_error="true"
+# Catch black syntax error in order to make sure it is passed to reviewdog
+if [[ "${black_exit_val}" -eq "123" ]]; then
   echo "[action-black] ERROR: Black found a syntax error when checking the" \
     "files (error code: ${black_exit_val})."
-elif [[ "${black_exit_val}" -eq "123" && "${reviewdog_exit_val}" -eq "0" ]]; then
-  black_error="true"
-  reviewdog_error="false"
-  echo "[action-black] ERROR: Black found a syntax error when checking the" \
-    "files (error code: ${black_exit_val})."
-else
-  if [[ "${black_exit_val}" -eq "123" && "${reviewdog_exit_val}" -ne "0" && \
-    "${reviewdog_exit_val}" -ne "1" ]]; then
-    echo "[action-black] ERROR: Black found a syntax error when checking the" \
-      "files (error code: ${black_exit_val})."
-    echo "[action-black] ERROR: Something went wrong while trying to run the" \
-      "reviewdog error annotator (error code: ${reviewdog_exit_val})."
-  elif [[ "${black_exit_val}" -ne "0" && "${black_exit_val}" -ne "1" && \
-    "${reviewdog_exit_val}" -ne "0" && "${reviewdog_exit_val}" -ne "1" ]]; then
-    echo "[action-black] ERROR: Something went wrong while trying to run the black" \
-      "formatter while annotating the changes using reviewdog (black error code:" \
-      "${black_exit_val}, reviewdog error code: ${reviewdog_exit_val})."
-  elif [[ "${black_exit_val}" -ne "0" && "${black_exit_val}" -ne "1" ]]; then
-    echo "[action-black] ERROR: Something went wrong while trying to run the black" \
-      "formatter (error code: ${black_exit_val})."
-  else
-    echo "[action-black] ERROR: Something went wrong while trying to run the" \
-      "reviewdog error annotator (error code: ${reviewdog_exit_val})."
-  fi
-  exit 1
+  # Set black exit code 0 as it is already parsed by reviewdog (see
+  # https://github.com/reviewdog/errorformat/commit/de0c436afead631a6e3a91ab3da71c16e69e2b9e)
+  black_exit_val="0"
 fi
 
 # Throw error if an error occurred and fail_on_error is true
-if [[ "${INPUT_FAIL_ON_ERROR,,}" = 'true' && ("${black_error}" = 'true' || \
-  "${reviewdog_error}" = 'true') ]]; then
+if [[ "${INPUT_FAIL_ON_ERROR,,}" = 'true' && ("${black_error}" -eq '1' || \
+  "${reviewdog_exit_val}" -eq "1") ]]; then
   exit 1
 fi

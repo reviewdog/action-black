@@ -3,45 +3,38 @@ description: "🐶 Run black formatter with reviewdog on pull requests to improv
 author: "Rick Staa"
 inputs:
   workdir:
-    description: "Working directory relative to the root directory. Defaults to '.'."
+    description: "Working directory relative to the root directory."
     required: false
     default: "."
-  fail_on_error:
-    description: |
-      Exit code when black formatting errors are found [true, false]. Defaults to 'false'.
-    required: false
-    default: "false"
   black_flags:
     description: "Additional black flags."
     required: false
     default: ""
   # Reviewdog related inputs
   github_token:
-    description: |
-      The GITHUB_TOKEN.  Must be in form of 'github_token: ${{ secrets.github_token }}'.
-      Defaults to '${{ github.token }}''. Defaults to '${{ github.token }}'.
+    description: "GITHUB_TOKEN."
     required: true
     default: ${{ github.token }}
   tool_name:
-    description: "Tool name to use for reviewdog reporter. Defaults to 'black-format'."
+    description: "Tool name to use for reviewdog reporter."
     required: false
     default: "black-format"
   level:
-    description: "Report level for reviewdog [info, warning, error]. Defaults to 'error'."
+    description: "Report level for reviewdog [info, warning, error]."
     required: false
     default: "error"
   reporter:
-    description: |
-      Reporter of reviewdog command [github-pr-check, github-pr-review, github-check].
-      Defaults to 'github-pr-check'.
+    description: "Reporter of reviewdog command [github-pr-check, github-pr-review, github-check]."
     required: false
     default: "github-pr-check"
   filter_mode:
-    description: |
-      Filtering mode for the reviewdog command [added, diff_context, file, nofilter].
-      Default is added.
+    description: "Filtering mode for the reviewdog command [added, diff_context, file, nofilter]."
     required: false
     default: "added"
+  fail_on_error:
+    description: "Exit code for reviewdog when errors are found [true, false]."
+    required: false
+    default: "false"
   reviewdog_flags:
     description: "Additional reviewdog flags."
     required: false
