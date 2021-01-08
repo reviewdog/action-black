@@ -40,7 +40,7 @@ if [[ "${INPUT_REPORTER}" = 'github-pr-review' ]]; then
 else
 
   echo "[action-black] Checking python code with the black formatter and reviewdog..."
-  black_check_output="$(black --check ${black_args_tmp[*]} 2>&1)" ||
+  black_check_output="$(black --check ${black_args[*]} 2>&1)" ||
     black_exit_val="$?"
 
   # Intput black formatter output to reviewdog
@@ -63,7 +63,7 @@ if [[ "${black_exit_val}" -eq "123" ]]; then
 fi
 
 # Throw error if an error occurred and fail_on_error is true
-if [[ "${INPUT_FAIL_ON_ERROR,,}" = 'true' && ("${black_error}" -eq '1' || \
+if [[ "${INPUT_FAIL_ON_ERROR,,}" = 'true' && ("${black_exit_val}" -eq '1' || \
   "${reviewdog_exit_val}" -eq "1") ]]; then
   exit 1
 fi
