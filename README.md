@@ -11,7 +11,7 @@
 
 This action runs the [black formatter](https://github.com/psf/black) with reviewdog on pull requests to improve code review experience.
 
-## Quick start
+## Quick Start
 
 In it's simplest form this action can be used to annotate the changes the [black](https://github.com/psf/black) formatter would make if it was run on the code.
 
@@ -30,7 +30,7 @@ jobs:
           # Change reviewdog reporter if you need [github-pr-check, github-check].
           reporter: github-pr-check
           # Change reporter level if you need.
-          # GitHub Status Check won't become failure with warning.
+          # GitHub Status Check won't become failure with a warning.
           level: warning
 ```
 
