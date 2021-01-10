@@ -3,60 +3,42 @@ description: "🐶 Run black formatter with reviewdog on pull requests to improv
 author: "Rick Staa"
 inputs:
   workdir:
-    description: "Working directory relative to the root directory. Defaults to '.'."
+    description: "Working directory relative to the root directory."
     required: false
     default: "."
-  format:
-    description: |
-      If true, black format files and commit are creatable (use other Action).
-      Defaults to 'false'.
-    required: false
-    default: "false"
-  fail_on_error:
-    description: |
-      Exit code when black formatting errors are found [true, false]. Defaults to 'false'.
-    required: false
-    default: "false"
-  black_flags:
+  black_args:
     description: "Additional black flags."
     required: false
     default: ""
   # Reviewdog related inputs
-  annotate:
-    description: "Annotate black changes using reviewdog. Defaults to 'true'."
-    required: false
-    default: "true"
   github_token:
-    description: "The automatically created secret github action token."
+    description: "GITHUB_TOKEN."
     required: true
     default: ${{ github.token }}
   tool_name:
-    description: "Tool name to use for reviewdog reporter. Defaults to 'black-format'."
+    description: "Tool name to use for reviewdog reporter."
     required: false
     default: "black-format"
   level:
-    description: "Report level for reviewdog [info, warning, error]. Defaults to 'error'."
+    description: "Report level for reviewdog [info, warning, error]."
     required: false
     default: "error"
   reporter:
-    description: |
-      Reporter of reviewdog command [github-pr-check, github-pr-review, github-check].
-      Defaults to 'github-pr-check'.
+    description: "Reporter of reviewdog command [github-pr-check, github-pr-review, github-check]."
     required: false
     default: "github-pr-check"
   filter_mode:
-    description: |
-      Filtering mode for the reviewdog command [added, diff_context, file, nofilter].
-      Default is added.
+    description: "Filtering mode for the reviewdog command [added, diff_context, file, nofilter]."
     required: false
     default: "added"
+  fail_on_error:
+    description: "Exit code for reviewdog when errors are found [true, false]."
+    required: false
+    default: "false"
   reviewdog_flags:
     description: "Additional reviewdog flags."
     required: false
     default: ""
-outputs:
-  is_formatted:
-    description: "Whether the files were formatted using the black formatter."
 runs:
   using: "docker"
   image: "Dockerfile"
