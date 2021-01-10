@@ -44,12 +44,12 @@ jobs:
 
 **Optional**. The directory to run remark-lint in. Defaults to `.`.
 
-#### `black_flags`
+#### `black_args`
 
-**Optional**. Additional black flags. Defaults to `""`.
+**Optional**. Additional black input arguments. Defaults to `""`.
 
-| :warning: | Because this action uses the black output to create the annotations, it does not work with the black `--quiet` flag.|
-|-----------|---------------------------------------------------------------------------------------------------------------------|
+| :warning: | Because this action uses the black output to create the annotations, it does not work with the black `--quiet` flag. |
+| --------- | -------------------------------------------------------------------------------------------------------------------- |
 
 #### `tool_name`
 

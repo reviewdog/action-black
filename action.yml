@@ -6,7 +6,7 @@ inputs:
     description: "Working directory relative to the root directory."
     required: false
     default: "."
-  black_flags:
+  black_args:
     description: "Additional black flags."
     required: false
     default: ""
