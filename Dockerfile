@@ -1,6 +1,6 @@
 FROM python:3
 
-ENV REVIEWDOG_VERSION=v0.11.0-nightly20210104+207b245
+ENV REVIEWDOG_VERSION=v0.12.0-nightly20210627+4216c7e
 
 RUN apt-get install bash
 
