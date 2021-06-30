@@ -16,7 +16,7 @@ jobs:
         with:
           file: Dockerfile
           version_name: REVIEWDOG_VERSION
-          repo: reviewdog/nightly
+          repo: reviewdog/reviewdog
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
