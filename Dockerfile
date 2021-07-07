@@ -4,7 +4,7 @@ ENV REVIEWDOG_VERSION=v0.12.0
 
 RUN apt-get install bash
 
-RUN wget -O - -q https://raw.githubusercontent.com/reviewdog/nightly/master/install.sh| sh -s -- -b /usr/local/bin/ ${REVIEWDOG_VERSION}
+RUN wget -O - -q https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh| sh -s -- -b /usr/local/bin/ ${REVIEWDOG_VERSION}
 
 RUN pip install black
 
