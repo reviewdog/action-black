@@ -10,6 +10,16 @@ fi
 
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
 
+export REVIEWDOG_VERSION=v0.13.0
+
+echo "[action-black] Installing reviewdog..."
+wget -O - -q https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh | sh -s -- -b /tmp "${REVIEWDOG_VERSION}"
+
+if [[ "$(which black)" == "" ]]; then
+  echo "[action-black] Installing black package..."
+  python -m pip install --upgrade black
+fi
+
 # Run black with reviewdog
 black_exit_val="0"
 reviewdog_exit_val="0"
@@ -19,7 +29,7 @@ if [[ "${INPUT_REPORTER}" = 'github-pr-review' ]]; then
     black_exit_val="$?"
 
   # Intput black formatter output to reviewdog
-  echo "${black_check_output}" | reviewdog -f="diff" \
+  echo "${black_check_output}" | /tmp/reviewdog -f="diff" \
     -f.diff.strip=0 \
     -name="${INPUT_TOOL_NAME}" \
     -reporter="github-pr-review" \
@@ -34,7 +44,7 @@ else
     black_exit_val="$?"
 
   # Intput black formatter output to reviewdog
-  echo "${black_check_output}" | reviewdog -f="black" \
+  echo "${black_check_output}" | /tmp/reviewdog -f="black" \
     -name="${INPUT_TOOL_NAME}" \
     -reporter="${INPUT_REPORTER}" \
     -filter-mode="${INPUT_FILTER_MODE}" \
@@ -58,3 +68,6 @@ if [[ "${INPUT_FAIL_ON_ERROR}" = 'true' && ("${black_exit_val}" -ne '0' || \
     exit 1
   fi
 fi
+
+echo "[action-black] Clean up reviewdog..."
+rm /tmp/reviewdog
