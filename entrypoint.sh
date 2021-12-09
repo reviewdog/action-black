@@ -25,10 +25,12 @@ black_exit_val="0"
 reviewdog_exit_val="0"
 if [[ "${INPUT_REPORTER}" = 'github-pr-review' ]]; then
   echo "[action-black] Checking python code with the black formatter and reviewdog..."
+  # shellcheck disable=SC2086
   black_check_output="$(black --diff --quiet --check . ${INPUT_BLACK_ARGS})" ||
     black_exit_val="$?"
 
   # Intput black formatter output to reviewdog
+  # shellcheck disable=SC2086
   echo "${black_check_output}" | /tmp/reviewdog -f="diff" \
     -f.diff.strip=0 \
     -name="${INPUT_TOOL_NAME}" \
@@ -40,10 +42,12 @@ if [[ "${INPUT_REPORTER}" = 'github-pr-review' ]]; then
 else
 
   echo "[action-black] Checking python code with the black formatter and reviewdog..."
+  # shellcheck disable=SC2086
   black_check_output="$(black --check . ${INPUT_BLACK_ARGS} 2>&1)" ||
     black_exit_val="$?"
 
   # Intput black formatter output to reviewdog
+  # shellcheck disable=SC2086
   echo "${black_check_output}" | /tmp/reviewdog -f="black" \
     -name="${INPUT_TOOL_NAME}" \
     -reporter="${INPUT_REPORTER}" \
