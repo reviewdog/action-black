@@ -17,7 +17,7 @@ wget -O - -q https://raw.githubusercontent.com/reviewdog/reviewdog/master/instal
 
 if [[ "$(which black)" == "" ]]; then
   echo "[action-black] Installing black package..."
-  python -m pip install --upgrade black
+  python -m pip install --upgrade black[jupyter]
 fi
 
 # Run black with reviewdog
@@ -54,7 +54,7 @@ else
 fi
 
 # Throw error if an error occurred and fail_on_error is true
-if [[ "${INPUT_FAIL_ON_ERROR}" = 'true' && ("${black_exit_val}" -ne '0' || \
+if [[ "${INPUT_FAIL_ON_ERROR}" = 'true' && ("${black_exit_val}" -ne '0' ||
   "${reviewdog_exit_val}" -eq "1") ]]; then
   if [[ "${black_exit_val}" -eq "123" ]]; then
     # NOTE: Done since syntax errors are already handled by reviewdog (see
