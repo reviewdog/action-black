@@ -18,7 +18,7 @@ jobs:
           workdir: ./testdata/
       - name: Check if code is left untouched (not formatted)
         run: |
-          changed_files=$(git status --porcelain | wc -l)
+          changed_files=$(git diff --name-only -- testdata/ | wc -l)
           if [[ ${changed_files} -eq 0 ]]; then
             echo "No changes detected!"
           else
