@@ -68,6 +68,7 @@ unset "black_check_file_paths[-1]"
 unset "black_check_file_paths[-1]"
 
 # append the array elements to BLACK_CHECK_FILE_PATHS in github env
+# shellcheck disable=SC2129
 echo "BLACK_CHECK_FILE_PATHS<<EOF" >>"$GITHUB_ENV"
 echo "${black_check_file_paths[@]}" >>"$GITHUB_ENV"
 echo "EOF" >>"$GITHUB_ENV"
