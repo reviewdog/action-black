@@ -57,6 +57,21 @@ else
     ${INPUT_REVIEWDOG_FLAGS} || reviewdog_exit_val="$?"
 fi
 
+# Output the checked file paths that would be formatted
+black_check_file_paths=()
+while read -r line; do
+  black_check_file_paths+=("$line")
+done <<<"${black_check_output//"would reformat "/}"
+
+# remove last two lines of black output, since they are irrelevant
+unset "black_check_file_paths[-1]"
+unset "black_check_file_paths[-1]"
+
+# append the array elements to BLACK_CHECK_FILE_PATHS in github env
+echo "BLACK_CHECK_FILE_PATHS<<EOF" >>"$GITHUB_ENV"
+echo "${black_check_file_paths[@]}" >>"$GITHUB_ENV"
+echo "EOF" >>"$GITHUB_ENV"
+
 # Throw error if an error occurred and fail_on_error is true
 if [[ "${INPUT_FAIL_ON_ERROR}" = 'true' && ("${black_exit_val}" -ne '0' ||
   "${reviewdog_exit_val}" -eq "1") ]]; then

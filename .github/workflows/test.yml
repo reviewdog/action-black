@@ -25,6 +25,17 @@ jobs:
             echo "Changes detected!"
             exit 1
           fi
+      - name: Check black would format the expected files
+        run: |
+          expected_files=(num_guess.py num_guess.ipynb subfolder/queen_problem.py subfolder/queen_problem.ipynb)
+          checked_files=(${{ env.BLACK_CHECK_FILE_PATHS }})
+          for file in ${checked_files[@]}; do
+            if ! [[ " ${expected_files[*]} " == *"$file"* ]]; then
+              echo "Unexpected file ${file} got checked!"
+              exit 1
+            fi
+          done
+          echo "Black checked the expected files: [${expected_files[@]}] successfully!"
 
   test-pr-check:
     if: github.event_name == 'pull_request'
