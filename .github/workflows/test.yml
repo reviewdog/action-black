@@ -29,8 +29,17 @@ jobs:
         run: |
           expected_files=(num_guess.py num_guess.ipynb subfolder/queen_problem.py subfolder/queen_problem.ipynb)
           checked_files=(${{ env.BLACK_CHECK_FILE_PATHS }})
+          # Check whether the expected files are checked
+          for file in ${expected_files[@]}; do
+            if ! [[ " ${checked_files[*]} " == *"${file}"* ]]; then
+              echo "Black forgot to check file ${file}!"
+              exit 1
+            fi
+          done
+
+          # Check whether black checks files that should not be checked
           for file in ${checked_files[@]}; do
-            if ! [[ " ${expected_files[*]} " == *"$file"* ]]; then
+            if ! [[ " ${expected_files[*]} " == *"${file}"* ]]; then
               echo "Unexpected file ${file} got checked!"
               exit 1
             fi
