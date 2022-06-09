@@ -39,6 +39,12 @@ if [[ "${INPUT_REPORTER}" = 'github-pr-review' ]]; then
     -level="${INPUT_LEVEL}" \
     -fail-on-error="${INPUT_FAIL_ON_ERROR}" \
     ${INPUT_REVIEWDOG_FLAGS} || reviewdog_exit_val="$?"
+
+  # regenerate black_check_output that command same as non-github-pr-review.
+  # because after process need normal generated black_check_output value.
+  # shellcheck disable=SC2086
+  black_check_output="$(black --check . ${INPUT_BLACK_ARGS} 2>&1)" ||
+    black_exit_val="$?"
 else
 
   echo "[action-black] Checking python code with the black formatter and reviewdog..."
