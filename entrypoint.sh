@@ -42,9 +42,11 @@ if [[ "${INPUT_REPORTER}" = 'github-pr-review' ]]; then
 
   # regenerate black_check_output that command same as non-github-pr-review.
   # because after process need normal generated black_check_output value.
-  # shellcheck disable=SC2086
+  # read and drop exit code
+  black_exit_val2="0"
+  # shellcheck disable=SC2086,SC2034
   black_check_output="$(black --check . ${INPUT_BLACK_ARGS} 2>&1)" ||
-    black_exit_val="$?"
+    black_exit_val2="$?"
 else
 
   echo "[action-black] Checking python code with the black formatter and reviewdog..."
