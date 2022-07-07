@@ -76,6 +76,12 @@ Default is github-pr-check.
 
 **Optional**. Additional reviewdog flags. Defaults to `""`.
 
+## Outputs
+
+### `BLACK_CHECK_FILE_PATHS`
+
+Contains all the files that would be changed by black.
+
 ## Format your code
 
 This action is meant to annotate any possible changes that would need to be made to make your code adhere to the [black formatting guidelines](github.com/psf/black). It does not apply these changes to your codebase. If you also want to apply the changes to your repository, you can use the [reviewdog/action-suggester](https://github.com/reviewdog/action-suggester). You can find examples of how this is done can be found in [rickstaa/action-black](https://github.com/rickstaa/action-black/)

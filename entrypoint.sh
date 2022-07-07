@@ -39,8 +39,12 @@ if [[ "${INPUT_REPORTER}" = 'github-pr-review' ]]; then
     -level="${INPUT_LEVEL}" \
     -fail-on-error="${INPUT_FAIL_ON_ERROR}" \
     ${INPUT_REVIEWDOG_FLAGS} || reviewdog_exit_val="$?"
-else
 
+  # Re-generate black output. Needed because the output of the '--diff' option can not
+  # be used to retrieve the files that black would change
+  # shellcheck disable=SC2086,SC2034
+  black_check_output="$(black --check . ${INPUT_BLACK_ARGS} 2>&1)" || true
+else
   echo "[action-black] Checking python code with the black formatter and reviewdog..."
   # shellcheck disable=SC2086
   black_check_output="$(black --check . ${INPUT_BLACK_ARGS} 2>&1)" ||
@@ -57,17 +61,23 @@ else
     ${INPUT_REVIEWDOG_FLAGS} || reviewdog_exit_val="$?"
 fi
 
+# Remove jupyter warning if present
+black_check_output="${black_check_output//"Skipping .ipynb files as Jupyter dependencies are not installed."/}"
+black_check_output="${black_check_output//"You can fix this by running \`\`pip install black[jupyter]\`\`"/}"
+
 # Output the checked file paths that would be formatted
 black_check_file_paths=()
 while read -r line; do
-  black_check_file_paths+=("$line")
+  if [ "$line" != "" ]; then
+    black_check_file_paths+=("$line")
+  fi
 done <<<"${black_check_output//"would reformat "/}"
 
 # remove last two lines of black output, since they are irrelevant
 unset "black_check_file_paths[-1]"
 unset "black_check_file_paths[-1]"
 
-# append the array elements to BLACK_CHECK_FILE_PATHS in github env
+# Append the array elements to BLACK_CHECK_FILE_PATHS in github env
 # shellcheck disable=SC2129
 echo "BLACK_CHECK_FILE_PATHS<<EOF" >>"$GITHUB_ENV"
 echo "${black_check_file_paths[@]}" >>"$GITHUB_ENV"
