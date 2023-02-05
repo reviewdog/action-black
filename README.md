@@ -48,12 +48,12 @@ jobs:
 
 **Optional**. Additional black input arguments. Defaults to `""`.
 
+| :warning: | Because this action uses the black output to create the annotations, it does not work with the black `--quiet` flag. |
+| --------- | -------------------------------------------------------------------------------------------------------------------- |
+
 #### `black_version`
 
 **Optional**. Version of black library `[black, black==23.1.0, black>=23.1.0, black[jupyter]]`. Defaults to `"black[jupyter]"`.
-
-| :warning: | Because this action uses the black output to create the annotations, it does not work with the black `--quiet` flag. |
-| --------- | -------------------------------------------------------------------------------------------------------------------- |
 
 #### `tool_name`
 
