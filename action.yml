@@ -10,6 +10,10 @@ inputs:
     description: "Additional black flags."
     required: false
     default: ""
+  black_version:
+    description: "Version of black library. Default latest version."
+    required: false
+    default: "black[jupyter]"
   # Reviewdog related inputs
   github_token:
     description: "GITHUB_TOKEN."
@@ -47,6 +51,7 @@ runs:
       env:
         INPUT_WORKDIR: ${{ inputs.workdir }}
         INPUT_BLACK_ARGS: ${{ inputs.black_args }}
+        INPUT_BLACK_VERSION: ${{ inputs.black_version }}
         INPUT_GITHUB_TOKEN: ${{ inputs.github_token }}
         INPUT_TOOL_NAME: ${{ inputs.tool_name }}
         INPUT_LEVEL: ${{ inputs.level }}

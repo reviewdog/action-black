@@ -17,7 +17,7 @@ wget -O - -q https://raw.githubusercontent.com/reviewdog/reviewdog/master/instal
 
 if [[ "$(which black)" == "" ]]; then
   echo "[action-black] Installing black package..."
-  python -m pip install --upgrade black[jupyter]
+  python -m pip install --upgrade "${INPUT_BLACK_VERSION}"
 fi
 
 # Run black with reviewdog
