@@ -23,8 +23,10 @@ jobs:
     name: runner / black formatter
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: reviewdog/action-black@v2
+      - uses: actions/checkout@v3
+      # Install specific version black (this step is not required. default is "black[jupyter]")
+      - run: pip install black==23.1.0
+      - uses: reviewdog/action-black@v3
         with:
           github_token: ${{ secrets.github_token }}
           # Change reviewdog reporter if you need [github-pr-check, github-check].
