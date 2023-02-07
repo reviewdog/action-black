@@ -39,8 +39,9 @@ jobs:
 
           # Check whether black checks files that should not be checked
           for file in ${checked_files[@]}; do
-            if ! [[ " ${expected_files[*]} " == *"${file}"* ]]; then
-              echo "Unexpected file ${file} got checked!"
+            trimmed_file="${file#${GITHUB_WORKSPACE}/testdata/}"
+            if ! [[ " ${expected_files[*]} " == *"${trimmed_file}"* ]]; then
+              echo "Unexpected file ${trimmed_file} got checked!"
               exit 1
             fi
           done
