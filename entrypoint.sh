@@ -14,11 +14,13 @@ export REVIEWDOG_VERSION=v0.14.1
 
 echo "[action-black] Installing reviewdog..."
 wget -O - -q https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh | sh -s -- -b /tmp "${REVIEWDOG_VERSION}"
+echo "[action-black] Reviewdog version: ${REVIEWDOG_VERSION}"
 
 if [[ "$(which black)" == "" ]]; then
   echo "[action-black] Installing black package..."
   python -m pip install --upgrade black[jupyter]
 fi
+echo "[action-black] Black version: $(black --version)"
 
 # Run black with reviewdog
 black_exit_val="0"
