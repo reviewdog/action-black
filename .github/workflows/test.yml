@@ -5,6 +5,34 @@ on:
       - master
   pull_request:
 jobs:
+  test-empty:
+    name: runner / black-format (empty)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./
+        with:
+          github_token: ${{ secrets.github_token }}
+          reporter: github-check
+          level: info
+          workdir: ./testdata/emptyfolder
+      - name: Check if code is left untouched (not formatted)
+        run: |
+          changed_files=$(git diff --name-only -- testdata/emptyfolder/ | wc -l)
+          if [[ ${changed_files} -eq 0 ]]; then
+            echo "No changes detected!"
+          else
+            echo "Changes detected!"
+            exit 1
+          fi
+      - name: Check if folder was classified as empty
+        run: |
+          if [[ ${{ env.EMPTY_FOLDER }} ]]; then
+            echo "Folder was classified as empty!"
+          else
+            echo "Folder was not classified as empty!"
+            exit 1
+          fi
   test-check:
     name: runner / black-format (github-check)
     runs-on: ubuntu-latest

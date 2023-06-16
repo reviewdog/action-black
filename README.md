@@ -50,8 +50,12 @@ jobs:
 
 **Optional**. Additional black input arguments. Defaults to `""`.
 
-| :warning: | Because this action uses the black output to create the annotations, it does not work with the black `--quiet` flag. |
-| --------- | -------------------------------------------------------------------------------------------------------------------- |
+> **Warning**
+> Because this action uses the black output to create the annotations, it does not work with the black `--quiet` flag.
+
+#### `verbose`
+
+**Optional**. Set to `true` to print the black output to the github action console. Defaults to `false`.
 
 #### `tool_name`
 
@@ -78,11 +82,15 @@ Default is github-pr-check.
 
 **Optional**. Additional reviewdog flags. Defaults to `""`.
 
-## Outputs
+## Output environment variables
 
 ### `BLACK_CHECK_FILE_PATHS`
 
 Contains all the files that would be changed by black.
+
+### `EMPTY_FOLDER`
+
+Whether no python files were found under the `workdir`.
 
 ## Format your code
 

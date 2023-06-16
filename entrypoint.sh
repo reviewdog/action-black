@@ -62,19 +62,33 @@ else
     ${INPUT_REVIEWDOG_FLAGS} || reviewdog_exit_val="$?"
 fi
 
+# Print warning if no python files were found.
+if [[ "${black_check_output}" == *"No Python files are present to be formatted. Nothing to do 😴"* ]]; then
+  echo -e "\033[3m[action-black]: WARNING: No Python files are present to be formatted. Nothing to do 😴\033[0m"
+  echo "EMPTY_FOLDER=true" >> "$GITHUB_ENV"
+else
+  echo "EMPTY_FOLDER=false" >> "$GITHUB_ENV"
+fi
+
+# Print black output if verbose is true.
+if [[ "${INPUT_VERBOSE}" = 'true' ]]; then
+  echo "[action-black] Black output:"
+  echo "${black_check_output}"
+fi
+
 # Retrieve formatted files from black output. Only add lines that start with 'would reformat'.
 black_check_file_paths=()
 while read -r line; do
   if [[ "${line}" == *"would reformat"* ]]; then
     black_check_file_paths+=("${line/"would reformat "/}")
   fi
-done <<<"$black_check_output"
+done <<< "$black_check_output"
 
 # Append the array elements to BLACK_CHECK_FILE_PATHS in github env.
 # shellcheck disable=SC2129
-echo "BLACK_CHECK_FILE_PATHS<<EOF" >>"$GITHUB_ENV"
-echo "${black_check_file_paths[@]}" >>"$GITHUB_ENV"
-echo "EOF" >>"$GITHUB_ENV"
+echo "BLACK_CHECK_FILE_PATHS<<EOF" >> "$GITHUB_ENV"
+echo "${black_check_file_paths[@]}" >> "$GITHUB_ENV"
+echo "EOF" >> "$GITHUB_ENV"
 
 # Throw error if an error occurred and fail_on_error is true.
 if [[ "${INPUT_FAIL_ON_ERROR}" = 'true' && ("${black_exit_val}" -ne '0' ||
