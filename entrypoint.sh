@@ -3,11 +3,11 @@
 set -eu # Increase bash strictness.
 set -o pipefail
 
-# if [[ -n "${GITHUB_WORKSPACE}" ]]; then
-#   cd "${GITHUB_WORKSPACE}/${INPUT_WORKDIR}" || exit
-# fi
+if [[ -n "${GITHUB_WORKSPACE}" ]]; then
+  cd "${GITHUB_WORKSPACE}/${INPUT_WORKDIR}" || exit
+fi
 
-# export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
+export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
 
 export REVIEWDOG_VERSION=v0.14.1
 
@@ -51,15 +51,15 @@ else
   black_check_output="$(black --check ./testdata/emptyfolder ${INPUT_BLACK_ARGS} 2>&1)" ||
     black_exit_val="$?"
 
-  # # Input black formatter output to reviewdog.
-  # # shellcheck disable=SC2086
-  # echo "${black_check_output}" | /tmp/reviewdog -f="black" \
-  #   -name="${INPUT_TOOL_NAME}" \
-  #   -reporter="${INPUT_REPORTER}" \
-  #   -filter-mode="${INPUT_FILTER_MODE}" \
-  #   -fail-on-error="${INPUT_FAIL_ON_ERROR}" \
-  #   -level="${INPUT_LEVEL}" \
-  #   ${INPUT_REVIEWDOG_FLAGS} || reviewdog_exit_val="$?"
+  # Input black formatter output to reviewdog.
+  # shellcheck disable=SC2086
+  echo "${black_check_output}" | /tmp/reviewdog -f="black" \
+    -name="${INPUT_TOOL_NAME}" \
+    -reporter="${INPUT_REPORTER}" \
+    -filter-mode="${INPUT_FILTER_MODE}" \
+    -fail-on-error="${INPUT_FAIL_ON_ERROR}" \
+    -level="${INPUT_LEVEL}" \
+    ${INPUT_REVIEWDOG_FLAGS} || reviewdog_exit_val="$?"
 fi
 
 # Print warning if no python files were found.
