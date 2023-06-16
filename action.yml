@@ -13,7 +13,7 @@ inputs:
   verbose:
     description: "Print black output."
     required: false
-    default: false
+    default: "false"
   # Reviewdog related inputs
   github_token:
     description: "GITHUB_TOKEN."
