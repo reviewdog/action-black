@@ -65,9 +65,6 @@ fi
 # Print warning if no python files were found.
 if [[ "${black_check_output}" == *"No Python files are present to be formatted. Nothing to do 😴"* ]]; then
   echo -e "\033[3m[action-black]: WARNING: No Python files are present to be formatted. Nothing to do 😴\033[0m"
-  echo "EMPTY_FOLDER=true" >> "$GITHUB_ENV"
-else
-  echo "EMPTY_FOLDER=false" >> "$GITHUB_ENV"
 fi
 
 # Print black output if verbose is true.

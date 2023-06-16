@@ -82,15 +82,13 @@ Default is github-pr-check.
 
 **Optional**. Additional reviewdog flags. Defaults to `""`.
 
-## Output environment variables
+## Outputs
 
-### `BLACK_CHECK_FILE_PATHS`
+### Environment variables
+
+#### `BLACK_CHECK_FILE_PATHS`
 
 Contains all the files that would be changed by black.
-
-### `EMPTY_FOLDER`
-
-Whether no python files were found under the `workdir`.
 
 ## Format your code
 

@@ -25,14 +25,6 @@ jobs:
             echo "Changes detected!"
             exit 1
           fi
-      - name: Check if folder was classified as empty
-        run: |
-          if [[ ${{ env.EMPTY_FOLDER }} ]]; then
-            echo "Folder was classified as empty!"
-          else
-            echo "Folder was not classified as empty!"
-            exit 1
-          fi
   test-check:
     name: runner / black-format (github-check)
     runs-on: ubuntu-latest
