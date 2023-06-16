@@ -1,5 +1,6 @@
 #!/bin/bash
 # <!--alex disable black-->
+
 set -eu # Increase bash strictness.
 set -o pipefail
 
@@ -48,7 +49,7 @@ if [[ "${INPUT_REPORTER}" = 'github-pr-review' ]]; then
 else
   echo "[action-black] Checking python code with the black formatter and reviewdog..."
   # shellcheck disable=SC2086
-  black_check_output="$(black --check ./testdata/emptyfolder ${INPUT_BLACK_ARGS} 2>&1)" ||
+  black_check_output="$(black --check . ${INPUT_BLACK_ARGS} 2>&1)" ||
     black_exit_val="$?"
 
   # Input black formatter output to reviewdog.
