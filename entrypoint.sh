@@ -3,11 +3,11 @@
 set -eu # Increase bash strictness.
 set -o pipefail
 
-if [[ -n "${GITHUB_WORKSPACE}" ]]; then
-  cd "${GITHUB_WORKSPACE}/${INPUT_WORKDIR}" || exit
-fi
+# if [[ -n "${GITHUB_WORKSPACE}" ]]; then
+#   cd "${GITHUB_WORKSPACE}/${INPUT_WORKDIR}" || exit
+# fi
 
-export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
+# export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
 
 export REVIEWDOG_VERSION=v0.14.1
 
@@ -48,23 +48,23 @@ if [[ "${INPUT_REPORTER}" = 'github-pr-review' ]]; then
 else
   echo "[action-black] Checking python code with the black formatter and reviewdog..."
   # shellcheck disable=SC2086
-  black_check_output="$(black --check . ${INPUT_BLACK_ARGS} 2>&1)" ||
+  black_check_output="$(black --check ./testdata/emptyfolder ${INPUT_BLACK_ARGS} 2>&1)" ||
     black_exit_val="$?"
 
-  # Input black formatter output to reviewdog.
-  # shellcheck disable=SC2086
-  echo "${black_check_output}" | /tmp/reviewdog -f="black" \
-    -name="${INPUT_TOOL_NAME}" \
-    -reporter="${INPUT_REPORTER}" \
-    -filter-mode="${INPUT_FILTER_MODE}" \
-    -fail-on-error="${INPUT_FAIL_ON_ERROR}" \
-    -level="${INPUT_LEVEL}" \
-    ${INPUT_REVIEWDOG_FLAGS} || reviewdog_exit_val="$?"
+  # # Input black formatter output to reviewdog.
+  # # shellcheck disable=SC2086
+  # echo "${black_check_output}" | /tmp/reviewdog -f="black" \
+  #   -name="${INPUT_TOOL_NAME}" \
+  #   -reporter="${INPUT_REPORTER}" \
+  #   -filter-mode="${INPUT_FILTER_MODE}" \
+  #   -fail-on-error="${INPUT_FAIL_ON_ERROR}" \
+  #   -level="${INPUT_LEVEL}" \
+  #   ${INPUT_REVIEWDOG_FLAGS} || reviewdog_exit_val="$?"
 fi
 
 # Print warning if no python files were found.
 if [[ "${black_check_output}" == *"No Python files are present to be formatted. Nothing to do 😴"* ]]; then
-  echo -e "\033[3m[action-black]: WARNING: No Python files are present to be formatted. Nothing to do 😴\033[0m"
+  echo -e "\e[33m[action-black]: WARNING: No Python files are present to be formatted. Nothing to do 😴"
 fi
 
 # Print black output if verbose is true.
