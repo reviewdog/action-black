@@ -1,7 +1,7 @@
 #!/bin/bash
 # <!--alex disable black-->
 
-set -eu # Increase bash strictness
+set -eu # Increase bash strictness.
 set -o pipefail
 
 if [[ -n "${GITHUB_WORKSPACE}" ]]; then
@@ -22,7 +22,7 @@ if [[ "$(which black)" == "" ]]; then
 fi
 echo "[action-black] Black version: $(black --version)"
 
-# Run black with reviewdog
+# Run black with reviewdog.
 black_exit_val="0"
 reviewdog_exit_val="0"
 if [[ "${INPUT_REPORTER}" = 'github-pr-review' ]]; then
@@ -31,7 +31,7 @@ if [[ "${INPUT_REPORTER}" = 'github-pr-review' ]]; then
   black_check_output="$(black --diff --quiet --check . ${INPUT_BLACK_ARGS})" ||
     black_exit_val="$?"
 
-  # Input black formatter output to reviewdog
+  # Input black formatter output to reviewdog.
   # shellcheck disable=SC2086
   echo "${black_check_output}" | /tmp/reviewdog -f="diff" \
     -f.diff.strip=0 \
@@ -43,7 +43,7 @@ if [[ "${INPUT_REPORTER}" = 'github-pr-review' ]]; then
     ${INPUT_REVIEWDOG_FLAGS} || reviewdog_exit_val="$?"
 
   # Re-generate black output. Needed because the output of the '--diff' option can not
-  # be used to retrieve the files that black would change
+  # be used to retrieve the files that black would change.
   # shellcheck disable=SC2086,SC2034
   black_check_output="$(black --check . ${INPUT_BLACK_ARGS} 2>&1)" || true
 else
@@ -52,7 +52,7 @@ else
   black_check_output="$(black --check . ${INPUT_BLACK_ARGS} 2>&1)" ||
     black_exit_val="$?"
 
-  # Input black formatter output to reviewdog
+  # Input black formatter output to reviewdog.
   # shellcheck disable=SC2086
   echo "${black_check_output}" | /tmp/reviewdog -f="black" \
     -name="${INPUT_TOOL_NAME}" \
@@ -63,29 +63,32 @@ else
     ${INPUT_REVIEWDOG_FLAGS} || reviewdog_exit_val="$?"
 fi
 
-# Remove jupyter warning if present
-black_check_output="${black_check_output//"Skipping .ipynb files as Jupyter dependencies are not installed."/}"
-black_check_output="${black_check_output//"You can fix this by running \`\`pip install black[jupyter]\`\`"/}"
+# Print warning if no python files were found.
+if [[ "${black_check_output}" == *"No Python files are present to be formatted. Nothing to do 😴"* ]]; then
+  echo -e "\e[33m[action-black]: WARNING: No Python files are present to be formatted. Nothing to do 😴"
+fi
 
-# Output the checked file paths that would be formatted
+# Print black output if verbose is true.
+if [[ "${INPUT_VERBOSE}" = 'true' ]]; then
+  echo "[action-black] Black output:"
+  echo "${black_check_output}"
+fi
+
+# Retrieve formatted files from black output. Only add lines that start with 'would reformat'.
 black_check_file_paths=()
 while read -r line; do
-  if [ "$line" != "" ]; then
-    black_check_file_paths+=("$line")
+  if [[ "${line}" == *"would reformat"* ]]; then
+    black_check_file_paths+=("${line/"would reformat "/}")
   fi
-done <<<"${black_check_output//"would reformat "/}"
+done <<< "$black_check_output"
 
-# remove last two lines of black output, since they are irrelevant
-unset "black_check_file_paths[-1]"
-unset "black_check_file_paths[-1]"
-
-# Append the array elements to BLACK_CHECK_FILE_PATHS in github env
+# Append the array elements to BLACK_CHECK_FILE_PATHS in github env.
 # shellcheck disable=SC2129
-echo "BLACK_CHECK_FILE_PATHS<<EOF" >>"$GITHUB_ENV"
-echo "${black_check_file_paths[@]}" >>"$GITHUB_ENV"
-echo "EOF" >>"$GITHUB_ENV"
+echo "BLACK_CHECK_FILE_PATHS<<EOF" >> "$GITHUB_ENV"
+echo "${black_check_file_paths[@]}" >> "$GITHUB_ENV"
+echo "EOF" >> "$GITHUB_ENV"
 
-# Throw error if an error occurred and fail_on_error is true
+# Throw error if an error occurred and fail_on_error is true.
 if [[ "${INPUT_FAIL_ON_ERROR}" = 'true' && ("${black_exit_val}" -ne '0' ||
   "${reviewdog_exit_val}" -eq "1") ]]; then
   if [[ "${black_exit_val}" -eq "123" ]]; then

@@ -10,6 +10,10 @@ inputs:
     description: "Additional black flags."
     required: false
     default: ""
+  verbose:
+    description: "Print black output."
+    required: false
+    default: "false"
   # Reviewdog related inputs
   github_token:
     description: "GITHUB_TOKEN."
@@ -54,6 +58,7 @@ runs:
         INPUT_FILTER_MODE: ${{ inputs.filter_mode }}
         INPUT_FAIL_ON_ERROR: ${{ inputs.fail_on_error }}
         INPUT_REVIEWDOG_FLAGS: ${{ inputs.reviewdog_flags }}
+        INPUT_VERBOSE: ${{ inputs.verbose }}
 
 # Ref: https://haya14busa.github.io/github-action-brandings/
 branding:

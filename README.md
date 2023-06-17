@@ -50,8 +50,12 @@ jobs:
 
 **Optional**. Additional black input arguments. Defaults to `""`.
 
-| :warning: | Because this action uses the black output to create the annotations, it does not work with the black `--quiet` flag. |
-| --------- | -------------------------------------------------------------------------------------------------------------------- |
+> **Warning**
+> Because this action uses the black output to create the annotations, it does not work with the black `--quiet` flag.
+
+#### `verbose`
+
+**Optional**. Set to `true` to print the black output to the github action console. Defaults to `false`.
 
 #### `tool_name`
 
@@ -80,7 +84,9 @@ Default is github-pr-check.
 
 ## Outputs
 
-### `BLACK_CHECK_FILE_PATHS`
+### Environment variables
+
+#### `BLACK_CHECK_FILE_PATHS`
 
 Contains all the files that would be changed by black.
 
