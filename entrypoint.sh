@@ -10,7 +10,7 @@ fi
 
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
 
-export REVIEWDOG_VERSION=v0.17.3
+export REVIEWDOG_VERSION=v0.17.4
 
 echo "[action-black] Installing reviewdog..."
 wget -O - -q https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh | sh -s -- -b /tmp "${REVIEWDOG_VERSION}"
