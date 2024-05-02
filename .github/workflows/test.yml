@@ -9,7 +9,7 @@ jobs:
     name: runner / black-format (empty)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
       - uses: ./
         with:
           github_token: ${{ secrets.github_token }}
@@ -29,7 +29,7 @@ jobs:
     name: runner / black-format (github-check)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
       - uses: ./
         with:
           github_token: ${{ secrets.github_token }}
@@ -72,7 +72,7 @@ jobs:
     name: runner / black-format (github-pr-check)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
       - uses: ./
         with:
           github_token: ${{ secrets.github_token }}
@@ -85,7 +85,7 @@ jobs:
     name: runner / black-format (github-pr-review)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
       - uses: ./
         with:
           github_token: ${{ secrets.github_token }}
