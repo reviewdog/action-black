@@ -13,7 +13,7 @@ export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
 export REVIEWDOG_VERSION=v0.20.3
 
 echo "[action-black] Installing reviewdog..."
-wget -O - -q https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh | sh -s -- -b /tmp "${REVIEWDOG_VERSION}"
+wget -O - -q https://raw.githubusercontent.com/reviewdog/reviewdog/fd59714416d6d9a1c0692d872e38e7f8448df4fc/install.sh | sh -s -- -b /tmp "${REVIEWDOG_VERSION}"
 echo "[action-black] Reviewdog version: ${REVIEWDOG_VERSION}"
 
 if [[ "$(which black)" == "" ]]; then
