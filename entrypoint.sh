@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # <!--alex disable black-->
 
 set -eu # Increase bash strictness.
