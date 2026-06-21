@@ -42,10 +42,11 @@ inputs:
       Otherwise, exit code 1 for reviewdog if it finds at least 1 issue with severity greater than or equal to the given level.
       Possible values: [none, any, info, warning, error]
       Default is `none`.
-    default: 'none'
+    default: "none"
   fail_on_error:
-    description: "Exit code for reviewdog when errors are found [true, false]."
-    description: "Deprecated, use `fail_level` instead. Exit code for reviewdog when errors are found [true, false]."
+    description: |
+      Exit code for reviewdog when errors are found [true, false].
+      Deprecated, use `fail_level` instead.
     deprecationMessage: Deprecated, use `fail_level` instead.
     required: false
     default: "false"
